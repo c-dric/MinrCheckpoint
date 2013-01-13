@@ -4,6 +4,7 @@ import java.util.logging.Logger;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
@@ -33,6 +34,14 @@ public class PlayerListener implements Listener {
 		Block bl = event.getClickedBlock();
 		Player player = event.getPlayer();
 		String name = player.getName();
+		Location bloc = bl.getLocation();
+		World world = bloc.getWorld();
+		String w = world.getName();
+		int x = bloc.getBlockX();
+		int y = bloc.getBlockY();
+		int z = bloc.getBlockZ();
+		
+		String where = w + "," + String.valueOf(x) + "," + String.valueOf(y) + "," + String.valueOf(z);
 		
 		if(event.getAction() == Action.RIGHT_CLICK_BLOCK && (bl.getTypeId() == 63 || bl.getTypeId() == 68)) {
 			Sign sign = (Sign)bl.getState();
@@ -63,7 +72,7 @@ public class PlayerListener implements Listener {
 					this.log.info("[MinrCheckpoint] " + name + " set new checkpoint to " + str2);
 				} else {
 					player.sendMessage(ChatColor.RED + "ERROR! This checkpoint was removed. Please inform an admin.");
-					System.out.println("[MinrCheckpoint] Checkpoint " + str2 + " doesn't exist!");
+					System.out.println("[MinrCheckpoint] Checkpoint " + str2 + " / " + where + " doesn't exist!");
 				}
 			} else if(str1.equalsIgnoreCase("[CheckpointE]")) {
 				if(plugin.signMap.containsKey(str2)) {					
@@ -82,10 +91,10 @@ public class PlayerListener implements Listener {
 					//plugin.ffaDB.removeKey(name);
 					//plugin.ffaMap.remove(name);
 					
-					this.log.info("[MinrCheckpoint] " + name + " finished hardcore maze set at " + str2);
+					this.log.info("[MinrCheckpoint] " + name + " finished hardcore maze set at " + str2 + " / " + where);
 				}  else {
 					player.sendMessage(ChatColor.RED + "ERROR! This checkpoint was removed. Please inform an admin.");
-					System.out.println("[MinrCheckpoint] Checkpoint " + str2 + " doesn't exist!");
+					System.out.println("[MinrCheckpoint] Checkpoint " + str2 + " / " + where + " doesn't exist!");
 				}
 			} else if(str1.equalsIgnoreCase("[CheckpointF]")) {
 				if(plugin.signMap.containsKey(str2)) {					
@@ -116,7 +125,7 @@ public class PlayerListener implements Listener {
 							}
 							
 							/* c_dric - Edited message */
-							this.log.info("[MinrCheckpoint] " + name + " used checkpointF " + str2);
+							this.log.info("[MinrCheckpoint] " + name + " used checkpointF " + str2 + " / " + where);
 						} else {
 							player.sendMessage(ChatColor.DARK_AQUA + "You need at least 5 FFA maze points!");
 						}
@@ -125,7 +134,7 @@ public class PlayerListener implements Listener {
 					}
 				} else {
 					player.sendMessage(ChatColor.RED + "ERROR! This checkpoint was removed. Please inform an admin.");
-					System.out.println("[MinrCheckpoint] Checkpoint " + str2 + " doesn't exist!");
+					System.out.println("[MinrCheckpoint] Checkpoint " + str2 + " / " + where + " doesn't exist!");
 				}
 				
 			/* c_dric's new code */
@@ -137,7 +146,7 @@ public class PlayerListener implements Listener {
 					this.log.info("[MinrCheckpoint] " + name + " used checkpointW at " + str2);
 				} else {
 					player.sendMessage(ChatColor.RED + "ERROR! This CheckpointW was removed. Please inform an admin.");
-					System.out.println("[MinrCheckpoint] CheckpointW " + str2 + " doesn't exist!");
+					System.out.println("[MinrCheckpoint] CheckpointW " + str2 + " / " + where + " doesn't exist!");
 				}
 			/* END */
 				
@@ -184,10 +193,10 @@ public class PlayerListener implements Listener {
 						
 					player.teleport(loc);
 					
-					this.log.info("[MinrCheckpoint] " + name + " gained " + String.valueOf(mp) + " point(s) at " + str2);
+					System.out.println("[MinrCheckpoint] " + name + " gained " + String.valueOf(mp) + " point(s) at " + str2 + " / " + where + " - New total : " + String.valueOf(i + mp) + " point(s)");
 				}  else {
 					player.sendMessage(ChatColor.RED + "ERROR! This checkpoint was removed. Please inform an admin.");
-					System.out.println("[MinrCheckpoint] Checkpoint " + str2 + " doesn't exist!");
+					System.out.println("[MinrCheckpoint] Checkpoint " + str2 + " / " + where + " doesn't exist!");
 				}
 			}
 		}
