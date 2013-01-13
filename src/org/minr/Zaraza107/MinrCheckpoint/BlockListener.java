@@ -51,7 +51,7 @@ public class BlockListener implements Listener  { //Nickman changed the base typ
 					
 				} else {
 					
-					if (!event.getLine(1).toLowerCase().matches("\\[checkpoint[pefw]{0,1}\\d{0,1}\\]")) {
+					if (!event.getLine(1).toLowerCase().matches("\\[checkpoint[pefw]{0,1}[1-5]{0,1}\\]")) {
 						player.sendMessage(ChatColor.RED + event.getLine(1) + " is not a valid checkpoint sign!");
 					}
 
