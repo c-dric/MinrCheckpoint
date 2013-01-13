@@ -1,0 +1,9 @@
+name: MinrCheckpoint-v4
+main: org.minr.Zaraza107.MinrCheckpoint.Checkpoint
+version: 4.1.beta
+author: Zaraza107, Nickman87, c_dric
+description: Checkpoints for mazes on Minr servers
+commands:
+  checkpoint:
+    description: MinrCheckpoint
+    usage: /<command> [create <name> <X> <Y> <Z>]|[delete <checkpoint>]|[remove <player>]|[points <player>]|[ffa <player>]|[give <player> <value>]
