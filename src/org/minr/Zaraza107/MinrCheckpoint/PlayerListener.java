@@ -69,7 +69,7 @@ public class PlayerListener implements Listener {
 					plugin.playerDB.setString(name, str2);
 					player.sendMessage(ChatColor.DARK_AQUA + "Your new checkpoint is set! :)");
 					
-					this.log.info("[MinrCheckpoint] " + name + " set new checkpoint to " + str2);
+					System.out.println("[MinrCheckpoint] " + name + " set new checkpoint to " + str2 + " / " + where);
 				} else {
 					player.sendMessage(ChatColor.RED + "ERROR! This checkpoint was removed. Please inform an admin.");
 					System.out.println("[MinrCheckpoint] Checkpoint " + str2 + " / " + where + " doesn't exist!");
@@ -143,7 +143,7 @@ public class PlayerListener implements Listener {
 					String[] split = plugin.signMap.get(str2).split(",");
 					Location loc = new Location(plugin.server.getWorld(split[0]), Double.parseDouble(split[1]), Double.parseDouble(split[2]) + 1.0D, Double.parseDouble(split[3]));
 					player.teleport(loc);
-					this.log.info("[MinrCheckpoint] " + name + " used checkpointW at " + str2);
+					this.log.info("[MinrCheckpoint] " + name + " used checkpointW at " + str2 + " / " + where);
 				} else {
 					player.sendMessage(ChatColor.RED + "ERROR! This CheckpointW was removed. Please inform an admin.");
 					System.out.println("[MinrCheckpoint] CheckpointW " + str2 + " / " + where + " doesn't exist!");
@@ -162,8 +162,6 @@ public class PlayerListener implements Listener {
 					int mp = Integer.parseInt(p);
 					int i = plugin.pointDB.getInt(name, 0);
 
-					System.out.println("[MinrCheckpoint] [DEBUG] p = " + p + " - mp = " + mp + " - i = " + i);					
-					
 					String[] split = plugin.signMap.get(str2).split(",");
 					Location loc = new Location(plugin.server.getWorld(split[0]), Double.parseDouble(split[1]), Double.parseDouble(split[2]) + 1.0D, Double.parseDouble(split[3]));
 						
@@ -209,6 +207,7 @@ public class PlayerListener implements Listener {
 		if(plugin.playerMap.containsKey(name)) {
 			String sign = plugin.playerMap.get(name);
 			String[] split = plugin.signMap.get(sign).split(",");
+			System.out.println("[MinrCheckpoint] " + name + " respawned at " + sign + " / " + plugin.signMap.get(sign));
 			
 			Location loc = new Location(plugin.server.getWorld(split[0]), Double.parseDouble(split[1]), Double.parseDouble(split[2]) + 1.0D, Double.parseDouble(split[3]));
 			event.setRespawnLocation(loc);

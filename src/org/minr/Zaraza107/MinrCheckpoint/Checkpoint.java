@@ -77,7 +77,7 @@ public class Checkpoint extends JavaPlugin {
 	
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		try {
-			if(sender.isOp() && sender instanceof Player) {
+			if(sender.isOp()) {
 				Player player = (Player)sender;
 				if(args[0].equalsIgnoreCase("create"))
 					return create(player, args[1], Double.parseDouble(args[2]), Double.parseDouble(args[3]), Double.parseDouble(args[4]));
@@ -92,8 +92,16 @@ public class Checkpoint extends JavaPlugin {
 				else if(args[0].equalsIgnoreCase("give"))
 					return give(player, args[1], args[2]);
 				else
+					sender.sendMessage(ChatColor.GOLD + "MinrCheckpoint - Commands :");
+					sender.sendMessage(ChatColor.GOLD + "/checkpoint create <warp-name> <x> <y> <z>");
+					sender.sendMessage(ChatColor.GOLD + "/checkpoint delete <warp-name>");
+					sender.sendMessage(ChatColor.GOLD + "/checkpoint ffa <player-name>");
+					sender.sendMessage(ChatColor.GOLD + "/checkpoint points <player-name>");
+					sender.sendMessage(ChatColor.GOLD + "/checkpoint give <player-name> <amount>");
+					sender.sendMessage(ChatColor.GOLD + "/checkpoint remove <player-name>");
 					return false;
 			} else
+				sender.sendMessage(ChatColor.RED + "The checkpoint command is OP only.");
 				return false;
 		} catch(Exception e) {
 			if(e instanceof NumberFormatException) {
@@ -112,10 +120,10 @@ public class Checkpoint extends JavaPlugin {
 			
 		this.signMap.put(name, player.getWorld().getName() + "," + x + "," + y + "," + z);
 		this.signDB.setString(name, player.getWorld().getName() + "," + x + "," + y + "," + z);
-		
-		System.out.println(name + "," + player.getWorld().getName() + "," + x + "," + y + "," + z);
+		String p = player.getPlayerListName();
+		System.out.println("[MinrCheckpoint] " + p + " created warp " + name + " at " + player.getWorld().getName() + "," + x + "," + y + "," + z);
 			
-		player.sendMessage(ChatColor.DARK_GREEN + "Checkpoint saved!");
+		player.sendMessage(ChatColor.DARK_GREEN + "Checkpoint " + name + " saved!");
 		
 		return true;
 	}
@@ -124,7 +132,9 @@ public class Checkpoint extends JavaPlugin {
 		if(this.signMap.containsKey(name)) {
 			this.signMap.remove(name);
 			this.signDB.removeKey(name);
-			player.sendMessage(ChatColor.DARK_AQUA + "Checkpoint removed from database :)");
+			player.sendMessage(ChatColor.DARK_AQUA + "Checkpoint " + name + " removed from database :)");
+			String p = player.getPlayerListName();
+			System.out.println("[MinrCheckpoint] " + p + " deleted warp " + name);
 		} else {
 			player.sendMessage(ChatColor.DARK_AQUA + "No such checkpoint in the database.");
 		}
@@ -140,7 +150,9 @@ public class Checkpoint extends JavaPlugin {
 			this.pointMap.remove(name);
 			this.ffaDB.removeKey(name);
 			this.ffaMap.remove(name);
-			player.sendMessage(ChatColor.DARK_AQUA + "Player removed from database :)");
+			player.sendMessage(ChatColor.DARK_AQUA + "Player " + name + " removed from database :)");
+			String p = player.getPlayerListName();
+			System.out.println("[MinrCheckpoint] " + p + " removed player " + name);
 		} else {
 			player.sendMessage(ChatColor.DARK_AQUA + "No such player in the database.");
 		}
@@ -206,6 +218,9 @@ public class Checkpoint extends JavaPlugin {
 	public boolean give(Player player, String name, String value) {
 		this.pointDB.setString(name, value);
 		this.pointMap.put(name, value);
+		player.sendMessage(ChatColor.DARK_AQUA + "Player " + name + " has now " + value + " point(s).");
+		String p = player.getPlayerListName();
+		System.out.println("[MinrCheckpoint] " + p + " gave " + name + " " + value + " point(s)");
 		return true;
 	}
 	
