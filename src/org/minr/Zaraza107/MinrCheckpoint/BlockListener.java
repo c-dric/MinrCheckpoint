@@ -40,11 +40,11 @@ public class BlockListener implements Listener  { //Nickman changed the base typ
 		
 		String where = w + "," + String.valueOf(x) + "," + String.valueOf(y) + "," + String.valueOf(z);   
 				
-		if (event.getLine(1).toLowerCase().contains("checkpoint")) {
+		if (event.getLine(1).toLowerCase().contains("[checkpoint")) {
 			
 			if (player.isOp()) {
 				
-				if ((event.getLine(1).toLowerCase().matches("\\[checkpoint[pefw]{0,1}\\d{0,1}\\]")) && warp.length() > 1) {
+				if ((event.getLine(1).toLowerCase().matches("\\[checkpoint[pefw]{0,1}[1-5]{0,1}\\]")) && warp.length() > 1) {
 					
 					player.sendMessage(ChatColor.DARK_GREEN + event.getLine(1) + " / " + warp + " sign created successfully!");
 					System.out.println("[MinrCheckpoint] " + p + " created " + event.getLine(1) + " / " + warp + " sign at " + where);
@@ -60,6 +60,9 @@ public class BlockListener implements Listener  { //Nickman changed the base typ
 					}
 					
 					System.out.println("[MinrCheckpoint] " + p + " failed creating " + event.getLine(1) + " / " + warp + " sign at " + where);
+					event.getBlock().breakNaturally();
+					event.setCancelled(true);
+					return;
 
 				}
 				
