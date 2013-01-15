@@ -29,7 +29,7 @@ public class PlayerListener implements Listener {
 		this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin); //Nickman clean way of registering ourselves
 	}
 	
-	@EventHandler(priority = EventPriority.MONITOR) // Makes your event Highest priority
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		Block bl = event.getClickedBlock();
 		Player player = event.getPlayer();
@@ -37,9 +37,9 @@ public class PlayerListener implements Listener {
 		Location bloc = bl.getLocation();
 		World world = bloc.getWorld();
 		String w = world.getName();
-		int x = bloc.getBlockX();
-		int y = bloc.getBlockY();
-		int z = bloc.getBlockZ();
+		double x = bloc.getX();
+		double y = bloc.getY();
+		double z = bloc.getZ();
 		
 		String where = w + "," + String.valueOf(x) + "," + String.valueOf(y) + "," + String.valueOf(z);
 		
@@ -196,6 +196,12 @@ public class PlayerListener implements Listener {
 					player.sendMessage(ChatColor.RED + "ERROR! This checkpoint was removed. Please inform an admin.");
 					System.out.println("[MinrCheckpoint] Checkpoint " + str2 + " / " + where + " doesn't exist!");
 				}
+
+			} else if((str1.toLowerCase().contains("[boom]")) && (str2.toLowerCase().contains("me up scotty!"))) {
+				System.out.println("[MinrCheckpoint] " + name + " exploded at " + where);
+				float power = 4F;
+				boolean setFire = true;
+				world.createExplosion(x, y, z, power, setFire);
 			}
 		}
 	}
