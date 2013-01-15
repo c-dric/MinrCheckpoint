@@ -200,8 +200,9 @@ public class PlayerListener implements Listener {
 			} else if((str1.toLowerCase().contains("[boom]")) && (str2.toLowerCase().contains("me up scotty!"))) {
 				System.out.println("[MinrCheckpoint] " + name + " exploded at " + where);
 				float power = 4F;
-				boolean setFire = true;
-				world.createExplosion(x, y, z, power, setFire);
+				boolean setFire = false;
+				boolean breakBlocks = false;
+				world.createExplosion(x, y, z, power, setFire, breakBlocks);
 			}
 		}
 	}
