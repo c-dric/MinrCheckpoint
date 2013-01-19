@@ -44,11 +44,6 @@ public class Checkpoint extends JavaPlugin {
         mBPermissionsApi = getServer().getPluginManager().getPlugin("bPermissions"); //Check to see if the plugin is available
         /* END */
         
-        
-        //this.server.getPluginManager().registerEvent(org.bukkit.event.block.SignChangeEvent.class, blockListener, org.bukkit.event.EventPriority.MONITOR, this);
-        //this.server.getPluginManager().registerEvent(Event.Type.PLAYER_INTERACT, playerListener, Event.Priority.Monitor, this);
-        //this.server.getPluginManager().registerEvent(Event.Type.PLAYER_RESPAWN, playerListener, Event.Priority.Monitor, this);
-        
     	new File(this.path).mkdir();
     	
     	this.settings = new iProperty(this.path + "minr.settings");
@@ -77,32 +72,25 @@ public class Checkpoint extends JavaPlugin {
 	
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		try {
-			if(sender.isOp()) {
-				Player player = (Player)sender;
-				if(args[0].equalsIgnoreCase("create"))
-					return create(player, args[1], Double.parseDouble(args[2]), Double.parseDouble(args[3]), Double.parseDouble(args[4]));
-				else if(args[0].equalsIgnoreCase("delete"))
-					return delete(player, args[1]);
-				else if(args[0].equalsIgnoreCase("remove"))
-					return remove(player, args[1]);
-				else if(args[0].equalsIgnoreCase("points"))
-					return points(player, args);
-				else if(args[0].equalsIgnoreCase("ffa"))
-					return ffa(player, args);				
-				else if(args[0].equalsIgnoreCase("give"))
-					return give(player, args[1], args[2]);
-				else
-					sender.sendMessage(ChatColor.GOLD + "MinrCheckpoint - Commands :");
-					sender.sendMessage(ChatColor.GOLD + "/checkpoint create <warp-name> <x> <y> <z>");
-					sender.sendMessage(ChatColor.GOLD + "/checkpoint delete <warp-name>");
-					sender.sendMessage(ChatColor.GOLD + "/checkpoint ffa <player-name>");
-					sender.sendMessage(ChatColor.GOLD + "/checkpoint points <player-name>");
-					sender.sendMessage(ChatColor.GOLD + "/checkpoint give <player-name> <amount>");
-					sender.sendMessage(ChatColor.GOLD + "/checkpoint remove <player-name>");
-					return false;
-			} else
-				sender.sendMessage(ChatColor.RED + "The checkpoint command is OP only.");
-				return false;
+			Player player = (Player)sender;
+			if(args[0].equalsIgnoreCase("points"))
+				return points(player, args);
+			else if(args[0].equalsIgnoreCase("ffa"))
+				return ffa(player, args);
+			else if(args[0].equalsIgnoreCase("help"))
+				return help(player);			
+			else if((args[0].equalsIgnoreCase("create")) && (sender.isOp()))
+				return create(player, args[1], Double.parseDouble(args[2]), Double.parseDouble(args[3]), Double.parseDouble(args[4]));
+			else if((args[0].equalsIgnoreCase("delete")) && (sender.isOp()) && (args[1].length() > 0))
+				return delete(player, args[1]);
+			else if((args[0].equalsIgnoreCase("remove")) && (sender.isOp()))
+				return remove(player, args[1]);
+			else if((args[0].equalsIgnoreCase("give")) && (sender.isOp()))
+				return give(player, args[1], args[2]);
+			else if (args[0].length() < 1)
+				return help(player);			
+			else
+				return help(player);
 		} catch(Exception e) {
 			if(e instanceof NumberFormatException) {
 				sender.sendMessage(ChatColor.RED + "Coordinates are in wrong format!");
@@ -161,7 +149,7 @@ public class Checkpoint extends JavaPlugin {
 	}
 	
 	public boolean points(Player player, String[] msg) {
-		if(player.isOp() && msg.length > 1) {
+		if(msg.length > 1) {
 			//Nickman Get all possible matches, show when there are multiple options
 			ArrayList<String> matchedNames = matchPlayerNames(msg[1], this.pointMap.keySet());
 			
@@ -180,8 +168,7 @@ public class Checkpoint extends JavaPlugin {
 				}
 			}
 			//Nickman end
-		}
-		if(!player.isOp() && this.playerMap.containsKey(player.getName())) {
+		} else {
 			if(this.pointMap.containsKey(player.getName()))
 				player.sendMessage(ChatColor.DARK_AQUA + "You have " + this.pointMap.get(player.getName()) + " Maze Points");
 			else
@@ -192,7 +179,7 @@ public class Checkpoint extends JavaPlugin {
 
 	/* v4 - c_dric new list ffa levels completed  */	
 	public boolean ffa(Player player, String[] msg) {
-		if(player.isOp() && msg.length > 1) {
+		if(msg.length > 1) {
 			//Nickman Get all possible matches, show when there are multiple options
 			ArrayList<String> matchedNames = matchPlayerNames(msg[1], this.ffaMap.keySet());
 			
@@ -211,6 +198,11 @@ public class Checkpoint extends JavaPlugin {
 				}
 			}
 			//Nickman end
+		} else {
+			if(this.ffaMap.containsKey(player))
+				player.sendMessage(ChatColor.DARK_AQUA + "Player " + player + " completed : " + this.ffaMap.get(player));
+			else
+				player.sendMessage(ChatColor.DARK_AQUA + "Player " + player + " did not complete a FFA level yet.");			
 		}
 		return true;
 	}	
@@ -223,7 +215,24 @@ public class Checkpoint extends JavaPlugin {
 		System.out.println("[MinrCheckpoint] " + p + " gave " + name + " " + value + " point(s)");
 		return true;
 	}
-	
+
+	public boolean help(Player player) {
+		if (player.isOp()) {
+			player.sendMessage(ChatColor.GOLD + "MinrCheckpoint - Commands :");
+			player.sendMessage(ChatColor.GOLD + "/checkpoint create <warp-name> <x> <y> <z>");
+			player.sendMessage(ChatColor.GOLD + "/checkpoint delete <warp-name>");
+			player.sendMessage(ChatColor.GOLD + "/checkpoint ffa <player-name>");
+			player.sendMessage(ChatColor.GOLD + "/checkpoint points <player-name>");
+			player.sendMessage(ChatColor.GOLD + "/checkpoint give <player-name> <amount>");
+			player.sendMessage(ChatColor.GOLD + "/checkpoint remove <player-name>");
+		} else {
+			player.sendMessage(ChatColor.GOLD + "MinrCheckpoint - Commands :");
+			player.sendMessage(ChatColor.GOLD + "/checkpoint ffa <player-name>");
+			player.sendMessage(ChatColor.GOLD + "/checkpoint points <player-name>");
+		}
+		return true;
+	}
+
 	/* Nickman's new code */
 	private static ArrayList<String> matchPlayerNames(String input, Set<String> names) { //Nickman get a list of (partially) matching users
 		ArrayList<String> matches = new ArrayList<String>();
