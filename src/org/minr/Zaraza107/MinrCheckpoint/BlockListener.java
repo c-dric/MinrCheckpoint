@@ -27,20 +27,20 @@ public class BlockListener implements Listener  { //Nickman changed the base typ
 	@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
 	public void onSignChange(SignChangeEvent event) {
 		
-		Player player = event.getPlayer();
-		String p = player.getPlayerListName();
-		String warp = event.getLine(2);
-		Block b = event.getBlock();
-		Location loc = b.getLocation();
-		World world = loc.getWorld();
-		String w = world.getName();
-		int x = loc.getBlockX();
-		int y = loc.getBlockY();
-		int z = loc.getBlockZ();
-		
-		String where = w + "," + String.valueOf(x) + "," + String.valueOf(y) + "," + String.valueOf(z);   
-				
 		if (event.getLine(1).toLowerCase().contains("[checkpoint")) {
+
+			Player player = event.getPlayer();
+			String p = player.getPlayerListName();
+			String warp = event.getLine(2);
+			Block b = event.getBlock();
+			Location loc = b.getLocation();
+			World world = loc.getWorld();
+			String w = world.getName();
+			int x = loc.getBlockX();
+			int y = loc.getBlockY();
+			int z = loc.getBlockZ();
+			
+			String where = w + "," + String.valueOf(x) + "," + String.valueOf(y) + "," + String.valueOf(z);  			
 			
 			if (player.isOp()) {
 				

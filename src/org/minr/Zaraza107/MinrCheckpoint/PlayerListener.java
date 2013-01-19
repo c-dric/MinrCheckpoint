@@ -25,7 +25,6 @@ public class PlayerListener implements Listener {
 	
 	public PlayerListener(Checkpoint instance) {
 		this.plugin = instance;
-		
 		this.plugin.getServer().getPluginManager().registerEvents(this, this.plugin); //Nickman clean way of registering ourselves
 	}
 	
@@ -43,10 +42,7 @@ public class PlayerListener implements Listener {
 			double x = bloc.getX();
 			double y = bloc.getY();
 			double z = bloc.getZ();
-			
 			String where = w + "," + String.valueOf(x) + "," + String.valueOf(y) + "," + String.valueOf(z);
-			
-			
 			Sign sign = (Sign)bl.getState();
 			String str1;
 			String str2;
