@@ -32,18 +32,21 @@ public class PlayerListener implements Listener {
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		Block bl = event.getClickedBlock();
-		Player player = event.getPlayer();
-		String name = player.getName();
-		Location bloc = bl.getLocation();
-		World world = bloc.getWorld();
-		String w = world.getName();
-		double x = bloc.getX();
-		double y = bloc.getY();
-		double z = bloc.getZ();
-		
-		String where = w + "," + String.valueOf(x) + "," + String.valueOf(y) + "," + String.valueOf(z);
-		
+
 		if(event.getAction() == Action.RIGHT_CLICK_BLOCK && (bl.getTypeId() == 63 || bl.getTypeId() == 68)) {
+
+			Player player = event.getPlayer();
+			String name = player.getName();
+			Location bloc = bl.getLocation();
+			World world = bloc.getWorld();
+			String w = world.getName();
+			double x = bloc.getX();
+			double y = bloc.getY();
+			double z = bloc.getZ();
+			
+			String where = w + "," + String.valueOf(x) + "," + String.valueOf(y) + "," + String.valueOf(z);
+			
+			
 			Sign sign = (Sign)bl.getState();
 			String str1;
 			String str2;
