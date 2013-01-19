@@ -1,8 +1,8 @@
-name: MinrCheckpoint-v4
+name: MinrCheckpoint-4.2
 main: org.minr.Zaraza107.MinrCheckpoint.Checkpoint
-version: 4.1.beta
+version: 4.2.beta
 author: Zaraza107, Nickman87, c_dric
-description: Checkpoints for mazes on Minr servers
+description: Levels checkpoints for Minr.org
 commands:
   checkpoint:
     description: MinrCheckpoint

@@ -98,7 +98,8 @@ public class PlayerListener implements Listener {
 			} else if(str1.equalsIgnoreCase("[CheckpointF]")) {
 				if(plugin.signMap.containsKey(str2)) {					
 					if(plugin.pointMap.containsKey(name)) {
-						if( Integer.parseInt(plugin.pointMap.get(name)) > plugin.pointsReq ) {
+						int prq = Integer.parseInt(plugin.pointMap.get(name));
+						if(( prq > plugin.pointsReq ) || ( prq == plugin.pointsReq )) {
 							String[] split = plugin.signMap.get(str2).split(",");
 							Location loc = new Location(plugin.server.getWorld(split[0]), Double.parseDouble(split[1]), Double.parseDouble(split[2]) + 1.0D, Double.parseDouble(split[3]));
 							player.teleport(loc);
@@ -124,12 +125,12 @@ public class PlayerListener implements Listener {
 							}
 							
 							/* c_dric - Edited message */
-							this.log.info("[MinrCheckpoint] " + name + " used checkpointF " + str2 + " / " + where);
+							System.out.println("[MinrCheckpoint] " + name + " used checkpointF " + str2 + " / " + where);
 						} else {
-							player.sendMessage(ChatColor.DARK_AQUA + "You need at least 5 FFA maze points!");
+							player.sendMessage(ChatColor.DARK_AQUA + "You need at least " + plugin.pointsReq + " FFA maze points!");
 						}
 					} else {
-						player.sendMessage(ChatColor.DARK_AQUA + "You need at least 5 FFA maze points!");
+						player.sendMessage(ChatColor.DARK_AQUA + "You need at least " + plugin.pointsReq + " FFA maze points!");
 					}
 				} else {
 					player.sendMessage(ChatColor.RED + "ERROR! This checkpoint was removed. Please inform an admin.");
@@ -142,7 +143,7 @@ public class PlayerListener implements Listener {
 					String[] split = plugin.signMap.get(str2).split(",");
 					Location loc = new Location(plugin.server.getWorld(split[0]), Double.parseDouble(split[1]), Double.parseDouble(split[2]) + 1.0D, Double.parseDouble(split[3]));
 					player.teleport(loc);
-					this.log.info("[MinrCheckpoint] " + name + " used checkpointW at " + str2 + " / " + where);
+					System.out.println("[MinrCheckpoint] " + name + " used checkpointW at " + str2 + " / " + where);
 				} else {
 					player.sendMessage(ChatColor.RED + "ERROR! This CheckpointW was removed. Please inform an admin.");
 					System.out.println("[MinrCheckpoint] CheckpointW " + str2 + " / " + where + " doesn't exist!");
