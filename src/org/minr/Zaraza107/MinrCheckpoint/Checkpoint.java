@@ -73,19 +73,21 @@ public class Checkpoint extends JavaPlugin {
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		try {
 			Player player = (Player)sender;
-			if(args[0].equalsIgnoreCase("points"))
+			if(args.length < 1)
+				return help(player);
+			else if(args[0].equalsIgnoreCase("points"))
 				return points(player, args);
 			else if(args[0].equalsIgnoreCase("ffa"))
 				return ffa(player, args);
 			else if(args[0].equalsIgnoreCase("help"))
 				return help(player);			
-			else if((args[0].equalsIgnoreCase("create")) && (sender.isOp()))
+			else if((args[0].equalsIgnoreCase("create")) && (sender.isOp()) && (args.length > 4))
 				return create(player, args[1], Double.parseDouble(args[2]), Double.parseDouble(args[3]), Double.parseDouble(args[4]));
-			else if((args[0].equalsIgnoreCase("delete")) && (sender.isOp()) && (args[1].length() > 0))
+			else if((args[0].equalsIgnoreCase("delete")) && (sender.isOp()) && (args.length > 1))
 				return delete(player, args[1]);
-			else if((args[0].equalsIgnoreCase("remove")) && (sender.isOp()))
+			else if((args[0].equalsIgnoreCase("remove")) && (sender.isOp()) && (args.length > 1))
 				return remove(player, args[1]);
-			else if((args[0].equalsIgnoreCase("give")) && (sender.isOp()))
+			else if((args[0].equalsIgnoreCase("give")) && (sender.isOp()) && (args.length > 2))
 				return give(player, args[1], args[2]);
 			else if (args[0].length() < 1)
 				return help(player);			
@@ -156,9 +158,9 @@ public class Checkpoint extends JavaPlugin {
 			if (matchedNames.size() == 1) {
 				String currName = matchedNames.get(0); //Retrieve the actual name
 				if(this.pointMap.containsKey(currName))
-					player.sendMessage(ChatColor.DARK_AQUA + "Player " + currName + " has " + this.pointMap.get(currName) + " Maze Points");
+					player.sendMessage(ChatColor.DARK_AQUA + "Player " + currName + " has " + this.pointMap.get(currName) + " points");
 				else
-					player.sendMessage(ChatColor.DARK_AQUA + "Player " + currName + " has no Maze Point");
+					player.sendMessage(ChatColor.DARK_AQUA + "Player " + currName + " has no point");
 			} else if (matchedNames.size() == 0) {
 				player.sendMessage(ChatColor.DARK_AQUA + "No players found that matched " + msg[1] + ".");
 			} else {
@@ -170,9 +172,9 @@ public class Checkpoint extends JavaPlugin {
 			//Nickman end
 		} else {
 			if(this.pointMap.containsKey(player.getName()))
-				player.sendMessage(ChatColor.DARK_AQUA + "You have " + this.pointMap.get(player.getName()) + " Maze Points");
+				player.sendMessage(ChatColor.DARK_AQUA + "You have " + this.pointMap.get(player.getName()) + " points");
 			else
-				player.sendMessage(ChatColor.DARK_AQUA + "You have no Maze Points");
+				player.sendMessage(ChatColor.DARK_AQUA + "You have no points");
 		}
 		return true;
 	}
