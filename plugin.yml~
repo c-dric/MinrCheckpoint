@@ -1,5 +1,5 @@
 name: MinrExtra
-main: org.minr.MinrExtra.Extra
+main: org.minr.MinrBoom.Boom
 version: 0.0
 author: c_dric
 description: Extras for Minr.org
