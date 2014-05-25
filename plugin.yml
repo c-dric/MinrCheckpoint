@@ -1,9 +1,9 @@
-name: MinrExtra
-main: org.minr.MinrExtra.Extra
-version: 0.0
-author: c_dric
-description: Extras for Minr.org
+name: MinrCheckpoint-4.2
+main: org.minr.Zaraza107.MinrCheckpoint.Checkpoint
+version: 4.2.beta
+author: Zaraza107, Nickman87, c_dric
+description: Levels checkpoints for Minr.org
 commands:
-  minr:
-    description: MinrExtra
-    usage: /<command> <player>
+  checkpoint:
+    description: MinrCheckpoint
+    usage: /<command> [create <name> <X> <Y> <Z>]|[delete <checkpoint>]|[remove <player>]|[points <player>]|[ffa <player>]|[give <player> <value>]
