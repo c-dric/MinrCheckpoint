@@ -4,6 +4,7 @@ import java.util.logging.Logger;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -32,7 +33,7 @@ public class PlayerListener implements Listener {
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		Block bl = event.getClickedBlock();
 
-		if(event.getAction() == Action.RIGHT_CLICK_BLOCK && (bl.getTypeId() == 63 || bl.getTypeId() == 68)) {
+		if(event.getAction() == Action.RIGHT_CLICK_BLOCK && (bl.getType() == Material.SIGN || bl.getType() == Material.SIGN_POST )) {
 
 			Player player = event.getPlayer();
 			String name = player.getName();

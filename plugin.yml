@@ -1,6 +1,6 @@
-name: MinrCheckpoint-4.2
+name: MinrCheckpoint-5
 main: org.minr.Zaraza107.MinrCheckpoint.Checkpoint
-version: 4.2.beta
+version: 5.alpha
 author: Zaraza107, Nickman87, c_dric
 description: Levels checkpoints for Minr.org
 commands:
