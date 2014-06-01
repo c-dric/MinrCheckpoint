@@ -34,7 +34,7 @@ public class Checkpoint extends JavaPlugin {
 	public void onEnable() {
     	this.server = this.getServer();
         PluginDescriptionFile pdfFile = this.getDescription();
-        System.out.println("[" + pdfFile.getName() + "] (version " + pdfFile.getVersion() + ") is enabled!");
+        System.out.println("[" + pdfFile.getName() + "] (" + pdfFile.getVersion() + ") is enabled!");
         
         /* Nickman's new code */
         new BlockListener(this);
@@ -133,6 +133,7 @@ public class Checkpoint extends JavaPlugin {
 	}
 	
 	public boolean remove(Player player, String name) {
+
 		if(this.playerMap.containsKey(name)) {
 			this.playerMap.remove(name);
 			this.playerDB.removeKey(name);

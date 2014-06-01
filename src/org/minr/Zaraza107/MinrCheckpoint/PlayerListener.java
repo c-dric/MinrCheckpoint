@@ -1,7 +1,9 @@
 package org.minr.Zaraza107.MinrCheckpoint;
 
+import java.util.UUID;
 import java.util.logging.Logger;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -35,7 +37,9 @@ public class PlayerListener implements Listener {
 
 		if(event.getAction() == Action.RIGHT_CLICK_BLOCK && (bl.getType() == Material.SIGN || bl.getType() == Material.SIGN_POST )) {
 
-			Player player = event.getPlayer();
+			UUID player_id = event.getPlayer().getUniqueId();
+			String player_string = player_id.toString();
+			Player player = Bukkit.getPlayer(player_id);
 			String name = player.getName();
 			Location bloc = bl.getLocation();
 			World world = bloc.getWorld();
@@ -57,19 +61,19 @@ public class PlayerListener implements Listener {
 			
 			if(str1.equalsIgnoreCase("[Checkpoint]")) {
 				if(plugin.signMap.containsKey(str2)) {
-					if(plugin.playerMap.containsKey(name)) {
-						String string = plugin.playerMap.get(name);
+					if(plugin.playerMap.containsKey(player_string)) {
+						String string = plugin.playerMap.get(player_string);
 						if(string.equalsIgnoreCase(str2)) {
 							player.sendMessage(ChatColor.DARK_AQUA + "You already set this checkpoint.");
 							return;
 						}
-						plugin.playerMap.remove(name);
+						plugin.playerMap.remove(player_string);
 					}
-					plugin.playerMap.put(name, str2);
-					plugin.playerDB.setString(name, str2);
+					plugin.playerMap.put(player_string, str2);
+					plugin.playerDB.setString(player_string, str2);
 					player.sendMessage(ChatColor.DARK_AQUA + "Your new checkpoint is set! :)");
 					
-					System.out.println("[MinrCheckpoint] " + name + " set new checkpoint to " + str2 + " / " + where);
+					System.out.println("[MinrCheckpoint] " + name + " - " + player_string + " set new checkpoint to " + str2 + " / " + where);
 				} else {
 					player.sendMessage(ChatColor.RED + "ERROR! This checkpoint was removed. Please inform an admin.");
 					System.out.println("[MinrCheckpoint] Checkpoint " + str2 + " / " + where + " doesn't exist!");
@@ -82,8 +86,8 @@ public class PlayerListener implements Listener {
 					
 					player.sendMessage(ChatColor.DARK_AQUA + "Congratulations! You finished Hardcore!"); // c_dric edited message
 					
-					plugin.playerDB.removeKey(name);
-					plugin.playerMap.remove(name);
+					plugin.playerDB.removeKey(player_string);
+					plugin.playerMap.remove(player_string);
 					
 					/* c_dric - Don't remove FFA points and FFA history */
 					//plugin.pointDB.removeKey(name);
@@ -91,15 +95,15 @@ public class PlayerListener implements Listener {
 					//plugin.ffaDB.removeKey(name);
 					//plugin.ffaMap.remove(name);
 					
-					this.log.info("[MinrCheckpoint] " + name + " finished hardcore maze set at " + str2 + " / " + where);
+					this.log.info("[MinrCheckpoint] " + name + " - " + player_string + " finished hardcore maze set at " + str2 + " / " + where);
 				}  else {
 					player.sendMessage(ChatColor.RED + "ERROR! This checkpoint was removed. Please inform an admin.");
 					System.out.println("[MinrCheckpoint] Checkpoint " + str2 + " / " + where + " doesn't exist!");
 				}
 			} else if(str1.equalsIgnoreCase("[CheckpointF]")) {
 				if(plugin.signMap.containsKey(str2)) {					
-					if(plugin.pointMap.containsKey(name)) {
-						int prq = Integer.parseInt(plugin.pointMap.get(name));
+					if(plugin.pointMap.containsKey(player_string)) {
+						int prq = Integer.parseInt(plugin.pointMap.get(player_string));
 						if(( prq > plugin.pointsReq ) || ( prq == plugin.pointsReq )) {
 							String[] split = plugin.signMap.get(str2).split(",");
 							Location loc = new Location(plugin.server.getWorld(split[0]), Double.parseDouble(split[1]), Double.parseDouble(split[2]) + 1.0D, Double.parseDouble(split[3]));
@@ -126,7 +130,7 @@ public class PlayerListener implements Listener {
 							}
 							
 							/* c_dric - Edited message */
-							System.out.println("[MinrCheckpoint] " + name + " used checkpointF " + str2 + " / " + where);
+							System.out.println("[MinrCheckpoint] " + name + " - " + player_string + " used checkpointF " + str2 + " / " + where);
 						} else {
 							player.sendMessage(ChatColor.DARK_AQUA + "You need at least " + plugin.pointsReq + " FFA maze points!");
 						}
@@ -144,7 +148,7 @@ public class PlayerListener implements Listener {
 					String[] split = plugin.signMap.get(str2).split(",");
 					Location loc = new Location(plugin.server.getWorld(split[0]), Double.parseDouble(split[1]), Double.parseDouble(split[2]) + 1.0D, Double.parseDouble(split[3]));
 					player.teleport(loc);
-					System.out.println("[MinrCheckpoint] " + name + " used checkpointW at " + str2 + " / " + where);
+					System.out.println("[MinrCheckpoint] " + name + " - " + player_string + " used checkpointW at " + str2 + " / " + where);
 				} else {
 					player.sendMessage(ChatColor.RED + "ERROR! This CheckpointW was removed. Please inform an admin.");
 					System.out.println("[MinrCheckpoint] CheckpointW " + str2 + " / " + where + " doesn't exist!");
@@ -161,17 +165,17 @@ public class PlayerListener implements Listener {
 					}
 			
 					int mp = Integer.parseInt(p);
-					int i = plugin.pointDB.getInt(name, 0);
+					int i = plugin.pointDB.getInt(player_string, 0);
 
 					String[] split = plugin.signMap.get(str2).split(",");
 					Location loc = new Location(plugin.server.getWorld(split[0]), Double.parseDouble(split[1]), Double.parseDouble(split[2]) + 1.0D, Double.parseDouble(split[3]));
 						
-					if(!plugin.ffaMap.containsKey(name)) {
+					if(!plugin.ffaMap.containsKey(player_string)) {
 						player.sendMessage(ChatColor.DARK_AQUA + "You gained " + String.valueOf(mp) + " point(s)! Your current score is " + String.valueOf(i + mp) + " point(s)");
-						plugin.ffaDB.setString(name, str2);
-						plugin.ffaMap.put(name, str2);
+						plugin.ffaDB.setString(player_string, str2);
+						plugin.ffaMap.put(player_string, str2);
 					} else {
-						String ffa = plugin.ffaMap.get(name);
+						String ffa = plugin.ffaMap.get(player_string);
 						String[] ffaSplit = ffa.split(",");
 						for(int j = 0; j < ffaSplit.length; j++) {
 							if(ffaSplit[j].equalsIgnoreCase(str2)) {
@@ -183,12 +187,12 @@ public class PlayerListener implements Listener {
 						
 						ffa += "," + str2;
 						player.sendMessage(ChatColor.DARK_AQUA + "You gained " + String.valueOf(mp) + " point(s)! Your current score is " + String.valueOf(i + mp) + " point(s)");
-						plugin.ffaDB.setString(name, ffa);
-						plugin.ffaMap.put(name, ffa);
+						plugin.ffaDB.setString(player_string, ffa);
+						plugin.ffaMap.put(player_string, ffa);
 					}
 					
-					plugin.pointDB.setInt(name, i + mp);
-					plugin.pointMap.put(name, String.valueOf(i + mp));
+					plugin.pointDB.setInt(player_string, i + mp);
+					plugin.pointMap.put(player_string, String.valueOf(i + mp));
 						
 					player.teleport(loc);
 					
@@ -199,7 +203,7 @@ public class PlayerListener implements Listener {
 				}
 
 			} else if((str1.toLowerCase().contains("[boom]")) && (str2.toLowerCase().contains("me up scotty!"))) {
-				System.out.println("[MinrCheckpoint] " + name + " exploded at " + where);
+				System.out.println("[MinrCheckpoint] " + name + " - " + player_string + " exploded at " + where);
 				float power = 4F;
 				boolean setFire = false;
 				boolean breakBlocks = false;
@@ -210,12 +214,15 @@ public class PlayerListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.HIGHEST) // Makes your event Highest priority
 	public void onPlayerRespawn(final PlayerRespawnEvent event) {
+
+		UUID player_id = event.getPlayer().getUniqueId();
+		String player_string = player_id.toString();
 		String name = event.getPlayer().getName();
 		
-		if(plugin.playerMap.containsKey(name)) {
-			String sign = plugin.playerMap.get(name);
+		if(plugin.playerMap.containsKey(player_string)) {
+			String sign = plugin.playerMap.get(player_string);
 			String[] split = plugin.signMap.get(sign).split(",");
-			System.out.println("[MinrCheckpoint] " + name + " respawned at " + sign + " / " + plugin.signMap.get(sign));
+			System.out.println("[MinrCheckpoint] " + name + " - " + player_string + " respawned at " + sign + " / " + plugin.signMap.get(sign));
 			
 			Location loc = new Location(plugin.server.getWorld(split[0]), Double.parseDouble(split[1]), Double.parseDouble(split[2]) + 1.0D, Double.parseDouble(split[3]));
 			event.setRespawnLocation(loc);
