@@ -34,48 +34,50 @@ public class Checkpoint extends JavaPlugin {
 	public void onEnable() {
 
 		this.server = this.getServer();
-        PluginDescriptionFile pdfFile = this.getDescription();
-        System.out.println("[" + pdfFile.getName() + "] (" + pdfFile.getVersion() + ") is enabled!");
-        
-        /* Nickman's new code */
-        new BlockListener(this);
-        new PlayerListener(this);
-        
-        //Do we need to actually do this???
-        mBPermissionsApi = getServer().getPluginManager().getPlugin("bPermissions"); //Check to see if the plugin is available
-        /* END */
-        
-    	new File(this.path).mkdir();
-    	
-    	this.settings = new iProperty(this.path + "minr.settings");
-    	this.pointsReq = settings.getInt("Maze-points-required-to-finish", 10);
-    	
-        this.signDB = new iProperty(this.path + "sign.db");
-        this.playerDB = new iProperty(this.path + "player.db");
-        this.pointDB = new iProperty(this.path + "point.db");
-        this.ffaDB = new iProperty(this.path + "ffa.db");
-        
-        try {
+		PluginDescriptionFile pdfFile = this.getDescription();
+		System.out.println("[" + pdfFile.getName() + "] (" + pdfFile.getVersion() + ") is enabled!");
+		
+		/* Nickman's new code */
+		new BlockListener(this);
+		new PlayerListener(this);
+		
+		//Do we need to actually do this???
+		mBPermissionsApi = getServer().getPluginManager().getPlugin("bPermissions"); //Check to see if the plugin is available
+		/* END */
+		
+		new File(this.path).mkdir();
+		
+		this.settings = new iProperty(this.path + "minr.settings");
+		this.pointsReq = settings.getInt("Maze-points-required-to-finish", 10);
+		
+		this.signDB = new iProperty(this.path + "sign.db");
+		this.playerDB = new iProperty(this.path + "player.db");
+		this.pointDB = new iProperty(this.path + "point.db");
+		this.ffaDB = new iProperty(this.path + "ffa.db");
 
-        	this.signMap = this.signDB.returnMap();
-        	this.playerMap = this.playerDB.returnMap();
-        	this.pointMap = this.pointDB.returnMap();
-        	this.ffaMap = this.ffaDB.returnMap();
+		try {
 
-        } catch(Exception e) {
+			this.signMap = this.signDB.returnMap();
+			this.playerMap = this.playerDB.returnMap();
+			this.pointMap = this.pointDB.returnMap();
+			this.ffaMap = this.ffaDB.returnMap();
 
-        	e.printStackTrace();
-        	this.server.getPluginManager().disablePlugin(this);
+		} catch(Exception e) {
 
-        }
+			e.printStackTrace();
+			this.server.getPluginManager().disablePlugin(this);
+
+		}
 
 	}
 
 	// What to do on plugin unload.
 
 	public void onDisable() {
-        PluginDescriptionFile pdfFile = this.getDescription();
-        System.out.println("[" + pdfFile.getName() + "] (version " + pdfFile.getVersion() + ") disabled. :(");
+
+		PluginDescriptionFile pdfFile = this.getDescription();
+		System.out.println("[" + pdfFile.getName() + "] (version " + pdfFile.getVersion() + ") disabled. :(");
+
 	}
 
 	// What to do when a command is run.
@@ -118,6 +120,9 @@ public class Checkpoint extends JavaPlugin {
 
 			else if((args[0].equalsIgnoreCase("giveid")) && (sender.isOp()) && (args.length > 2))
 				return giveid(player, args[1], args[2]);
+
+			else if((args[0].equalsIgnoreCase("set")) && (sender.isOp()) && (args.length > 2))
+				return set(player, args[1], args[2]);
 
 			else if (args[0].length() < 1)
 				return help(player);			
@@ -544,6 +549,63 @@ public class Checkpoint extends JavaPlugin {
 
 	}
 
+	// Change a player's CP.
+
+	public boolean set(Player player, String name, String value) {
+
+		// Get the player name of the command sender.
+
+		String p = player.getPlayerListName();
+
+		// Get a UUID for the player. From cache or mojang.com.
+
+		String player_id = UUIDManager.getUUIDFromPlayer(name).toString();
+
+		// Check if the checkpoint on the 3rd line is in the database
+
+		if(this.signMap.containsKey(value)) {
+
+			// Check if the player has a CP.
+
+			if(this.playerMap.containsKey(player_id)) {
+
+				String saved_cp = this.playerMap.get(player_id);
+
+				if(saved_cp.equalsIgnoreCase(value)) {
+
+					// If the player already set this CP:
+
+					player.sendMessage(ChatColor.DARK_AQUA + "Player already has this checkpoint.");
+
+				} else {
+
+					// If the player has another CP, remove it.
+	
+					this.playerMap.remove(saved_cp);
+
+				}
+
+			}
+
+			// Set a new CP for this player.
+
+			this.playerMap.put(player_id, value);
+			this.playerDB.setString(player_id, value);
+
+			// Inform the player.
+
+			player.sendMessage(ChatColor.DARK_AQUA + name + " / " + player_id + " has a new CP at " + value);
+
+			// Let @Barrack know.
+
+			System.out.println("[MinrCheckpoint] " + p + " set the CP of " + name + " / " + player_id + " at : " + value);
+
+		}
+
+		return true;
+
+	}
+
 	// Wrong command? Halp.
 
 	public boolean help(Player player) {
@@ -560,6 +622,7 @@ public class Checkpoint extends JavaPlugin {
 			player.sendMessage(ChatColor.GOLD + "/checkpoint points <player-name>");
 			player.sendMessage(ChatColor.GOLD + "/checkpoint give <player-name> <amount>");
 			player.sendMessage(ChatColor.GOLD + "/checkpoint giveid <UUID> <amount>");
+			player.sendMessage(ChatColor.GOLD + "/checkpoint set <player-name> <checkpoint>");
 			player.sendMessage(ChatColor.GOLD + "/checkpoint remove <player-name>");
 			player.sendMessage(ChatColor.GOLD + "/checkpoint removeid <UUID>");
 

@@ -91,7 +91,7 @@ public class PlayerListener implements Listener {
 
 			if(str1.equalsIgnoreCase("[Checkpoint]")) {
 
-				// Check if the checkpoint on the 3rd line is in the database
+				// Check if the checkpoint on the 3rd line is in the database.
 
 				if(plugin.signMap.containsKey(str2)) {
 
@@ -110,13 +110,13 @@ public class PlayerListener implements Listener {
 
 						}
 
-						// If the player has another CP set:
+						// If the player has another CP set.
 
 						plugin.playerMap.remove(player_string);
 
 					}
 
-					// Set a new CP for this player
+					// Set a new CP for this player.
 
 					plugin.playerMap.put(player_string, str2);
 					plugin.playerDB.setString(player_string, str2);
