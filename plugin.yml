@@ -1,8 +1,8 @@
 name: MinrCheckpoint-5
 main: org.minr.Zaraza107.MinrCheckpoint.Checkpoint
 version: 5.alpha
-author: Zaraza107, Nickman87, c_dric
-description: Levels checkpoints for Minr.org
+author: Zaraza107, Nickman87, c_dric, Staartvin, evilmidget38
+description: Level checkpoints for Minr.org
 commands:
   checkpoint:
     description: MinrCheckpoint
