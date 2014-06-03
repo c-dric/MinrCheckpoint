@@ -772,4 +772,42 @@ public class Checkpoint extends JavaPlugin {
 		return uuid.matches("[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}");
 	}
 
+	// Convert old players data.
+	
+	public boolean playerConvert(String name, String player_string, Boolean cp, Boolean pts, Boolean ffa){
+
+		if(this.playerMap.containsKey(name)) {
+
+			String obj = this.playerMap.get(name);
+
+			this.playerMap.put(player_string, obj);
+			this.playerDB.setString(player_string, obj);
+			this.playerMap.remove(name);
+
+		}
+		
+		if(this.pointMap.containsKey(name)) {
+
+			String obj = this.pointMap.get(name);
+
+			this.pointMap.put(player_string, obj);
+			this.pointDB.setString(player_string, obj);
+			this.pointMap.remove(name);
+
+		}
+
+		if(this.ffaMap.containsKey(name)) {
+
+			String obj = this.ffaMap.get(name);
+
+			this.ffaMap.put(player_string, obj);
+			this.ffaDB.setString(player_string, obj);
+
+			this.ffaMap.remove(name);
+		}
+		
+		return true;
+		
+	}
+	
 }

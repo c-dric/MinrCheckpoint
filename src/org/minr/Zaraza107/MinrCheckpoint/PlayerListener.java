@@ -55,6 +55,26 @@ public class PlayerListener implements Listener {
 			Player player = Bukkit.getPlayer(player_id);
 			String name = player.getName();
 
+			// Set standard tag.
+
+			String stag = ChatColor.GRAY + "[" + ChatColor.WHITE + "MCP" + ChatColor.GRAY + "] ";
+
+			// Set warning tag.
+
+			String wtag = ChatColor.GRAY + "[" + ChatColor.YELLOW + "MCP" + ChatColor.GRAY + "] ";
+
+			// Set error tag.
+
+			String etag = ChatColor.GRAY + "[" + ChatColor.RED + "MCP" + ChatColor.GRAY + "] ";
+
+			// Set HC completion tag
+
+			String gtag = ChatColor.GRAY + "[" + ChatColor.GREEN + "MCP" + ChatColor.GRAY + "] ";
+
+			// Set blue tag
+
+			String btag = ChatColor.GRAY + "[" + ChatColor.AQUA + "MCP" + ChatColor.GRAY + "] ";
+
 			// Get location
 
 			Location bloc = bl.getLocation();
@@ -105,7 +125,26 @@ public class PlayerListener implements Listener {
 
 						if(string.equalsIgnoreCase(str2)) {
 
-							player.sendMessage(ChatColor.DARK_AQUA + "You already set this checkpoint.");
+							player.sendMessage(wtag + ChatColor.GRAY + "You already set this checkpoint.");
+							return;
+
+						}
+
+						// If the player has another CP set.
+
+						plugin.playerMap.remove(player_string);
+
+					} else if(plugin.ffaMap.containsKey(name) || plugin.pointMap.containsKey(name) || plugin.playerMap.containsKey(name)) {
+
+						playerConvert(player, name, player_string);
+
+						String string = plugin.playerMap.get(player_string);
+
+						// If the player already set this CP:
+
+						if(string.equalsIgnoreCase(str2)) {
+
+							player.sendMessage(wtag + ChatColor.GRAY + "You already set this checkpoint.");
 							return;
 
 						}
@@ -123,7 +162,7 @@ public class PlayerListener implements Listener {
 
 					// Let the player know.
 
-					player.sendMessage(ChatColor.DARK_AQUA + "Your new checkpoint is set! :)");
+					player.sendMessage(stag + ChatColor.GRAY + "Your new checkpoint is set! :)");
 
 					// Let @Barrack know.
 
@@ -135,7 +174,7 @@ public class PlayerListener implements Listener {
 
 					// Inform the player.
 
-					player.sendMessage(ChatColor.RED + "ERROR! This checkpoint doesn't exist. Please inform an admin.");
+					player.sendMessage(etag + ChatColor.GRAY + "ERROR! This checkpoint doesn't exist. Please inform an admin.");
 
 					// Inform @Barrack.
 
@@ -159,21 +198,18 @@ public class PlayerListener implements Listener {
 
 					// Congratulate the player on finishing HC.
 
-					player.sendMessage(ChatColor.DARK_AQUA + "Congratulations! You finished Hardcore!"); // c_dric edited message
+					player.sendMessage(gtag + ChatColor.GRAY + "Congratulations! You finished Hardcore!");
+
+					// Check for files in the old format.
+
+					if(plugin.ffaMap.containsKey(name) || plugin.pointMap.containsKey(name) || plugin.playerMap.containsKey(name)) {
+						playerConvert(player, name, player_string);
+					}
 
 					// Remove the player CP.
 
 					plugin.playerDB.removeKey(player_string);
 					plugin.playerMap.remove(player_string);
-
-					/* Don't remove FFA points and FFA history
-
-					plugin.pointDB.removeKey(name);
-					plugin.pointMap.remove(name);
-					plugin.ffaDB.removeKey(name);
-					plugin.ffaMap.remove(name);
-
-					*/
 
 					// Inform @Barrack.
 
@@ -183,7 +219,7 @@ public class PlayerListener implements Listener {
 
 					// CP doesn't exist.
 
-					player.sendMessage(ChatColor.RED + "ERROR! This checkpoint was removed. Please inform an admin.");
+					player.sendMessage(etag + ChatColor.GRAY + "This checkpoint was removed. Please inform an admin.");
 					System.out.println("[MinrCheckpoint] Checkpoint " + str2 + " / " + where + " doesn't exist!");
 
 				}
@@ -195,6 +231,12 @@ public class PlayerListener implements Listener {
 				// Check if the cp on line 2 exists.
 
 				if(plugin.signMap.containsKey(str2)) {
+
+					// Check for files in the old format.
+
+					if(plugin.ffaMap.containsKey(name) || plugin.pointMap.containsKey(name) || plugin.playerMap.containsKey(name)) {
+						playerConvert(player, name, player_string);
+					}
 
 					// Check if the player exists in the points DB.
 
@@ -214,18 +256,7 @@ public class PlayerListener implements Listener {
 
 							// Welcome the player to HC.
 
-							player.sendMessage(ChatColor.DARK_AQUA + "Congratulations! Welcome to Hardcore!");
-
-							/* Don't remove FFA points and FFA history.
-
-							plugin.playerDB.removeKey(name);
-							plugin.playerMap.remove(name);
-							plugin.pointDB.removeKey(name);
-							plugin.pointMap.remove(name);
-							plugin.ffaDB.removeKey(name);
-							plugin.ffaMap.remove(name);
-
-							*/
+							player.sendMessage(btag + ChatColor.GRAY + "Congratulations! Welcome to Hardcore!");
 
 							// Nickman : change the users group.
 
@@ -249,7 +280,7 @@ public class PlayerListener implements Listener {
 
 							// Player doesn't have enough points.
 
-							player.sendMessage(ChatColor.DARK_AQUA + "You need at least " + plugin.pointsReq + " FFA maze points!");
+							player.sendMessage(wtag + ChatColor.GRAY + "You need at least " + plugin.pointsReq + " FFA maze points!");
 
 						}
 
@@ -257,7 +288,7 @@ public class PlayerListener implements Listener {
 
 						// Player unknown
 
-						player.sendMessage(ChatColor.DARK_AQUA + "You need at least " + plugin.pointsReq + " FFA maze points!");
+						player.sendMessage(wtag + ChatColor.GRAY + "You need at least " + plugin.pointsReq + " FFA maze points!");
 
 					}
 
@@ -265,7 +296,7 @@ public class PlayerListener implements Listener {
 
 					// CP on line 2 doesn't exist.
 
-					player.sendMessage(ChatColor.RED + "ERROR! This checkpoint was removed. Please inform an admin.");
+					player.sendMessage(etag + ChatColor.GRAY + "This checkpoint was removed. Please inform an admin.");
 					System.out.println("[MinrCheckpoint] Checkpoint " + str2 + " / " + where + " doesn't exist!");
 
 				}
@@ -276,7 +307,7 @@ public class PlayerListener implements Listener {
 
 				// Check if the cp on line 2 exists.
 
-				if(plugin.signMap.containsKey(str2)) {					
+				if(plugin.signMap.containsKey(str2)) {
 
 					// Get the CP location
 
@@ -295,7 +326,7 @@ public class PlayerListener implements Listener {
 
 					// Inform the player that the CP doesn't exist.
 
-					player.sendMessage(ChatColor.RED + "ERROR! This CheckpointW was removed. Please inform an admin.");
+					player.sendMessage(etag + ChatColor.GRAY + "This CheckpointW was removed. Please inform an admin.");
 
 					// Inform @Barrack.
 
@@ -311,6 +342,21 @@ public class PlayerListener implements Listener {
 
 				if(plugin.signMap.containsKey(str2)) {
 
+					// Get the coords of the CP on line 3.
+
+					String[] split = plugin.signMap.get(str2).split(",");
+					Location loc = new Location(plugin.server.getWorld(split[0]), Double.parseDouble(split[1]), Double.parseDouble(split[2]) + 1.0D, Double.parseDouble(split[3]));
+
+					// Teleport the player to the CP location.
+
+					player.teleport(loc);
+
+					// Check for files in the old format.
+
+					if(plugin.ffaMap.containsKey(name) || plugin.pointMap.containsKey(name) || plugin.playerMap.containsKey(name)) {
+						playerConvert(player, name, player_string);
+					}
+
 					// Get the number of points to give from line 2
 
 					String p = str1.substring(12, 13);
@@ -321,18 +367,11 @@ public class PlayerListener implements Listener {
 						p = "1" ;
 					}
 
-					// Voodoo.
-
 					int mp = Integer.parseInt(p);
 
 					// Get the player's current points
 
 					int i = plugin.pointDB.getInt(player_string, 0);
-
-					// Get the coords of the CP on line 3.
-
-					String[] split = plugin.signMap.get(str2).split(",");
-					Location loc = new Location(plugin.server.getWorld(split[0]), Double.parseDouble(split[1]), Double.parseDouble(split[2]) + 1.0D, Double.parseDouble(split[3]));
 
 					// Does the player exist in the DB?
 
@@ -345,7 +384,7 @@ public class PlayerListener implements Listener {
 
 						// Inform the player.
 
-						player.sendMessage(ChatColor.DARK_AQUA + "You gained " + String.valueOf(mp) + " point(s)! Your current score is " + String.valueOf(i + mp) + " point(s)");
+						player.sendMessage(stag + ChatColor.GRAY + "You gained " + ChatColor.WHITE + String.valueOf(mp) + ChatColor.GRAY + " point(s)! Your current score is " + ChatColor.WHITE + String.valueOf(i + mp) + ChatColor.GRAY + " point(s).");
 
 					} else {
 
@@ -360,11 +399,7 @@ public class PlayerListener implements Listener {
 
 								// Level already beaten. No points.
 
-								player.sendMessage(ChatColor.DARK_RED + "You already gained " + String.valueOf(mp) + " point(s) for completing this maze.");
-
-								// Only a teleport.
-
-								player.teleport(loc);
+								player.sendMessage(wtag + ChatColor.GRAY + "You already gained " + String.valueOf(mp) + " point(s) for completing this maze.");
 
 								return;
 
@@ -380,7 +415,7 @@ public class PlayerListener implements Listener {
 
 						// Inform the player.
 
-						player.sendMessage(ChatColor.DARK_AQUA + "You gained " + String.valueOf(mp) + " point(s)! Your current score is " + String.valueOf(i + mp) + " point(s)");
+						player.sendMessage(stag + ChatColor.GRAY + "You gained " + ChatColor.WHITE + String.valueOf(mp) + ChatColor.GRAY + " point(s)! Your current score is " + ChatColor.WHITE + String.valueOf(i + mp) + ChatColor.GRAY + " point(s).");
 
 					}
 
@@ -388,10 +423,6 @@ public class PlayerListener implements Listener {
 
 					plugin.pointDB.setInt(player_string, i + mp);
 					plugin.pointMap.put(player_string, String.valueOf(i + mp));
-
-					// Teleport the player to the CP location.
-
-					player.teleport(loc);
 
 					// Inform @Barrack.
 
@@ -440,13 +471,14 @@ public class PlayerListener implements Listener {
 
 		UUID player_id = event.getPlayer().getUniqueId();
 		String player_string = player_id.toString();
+		Player player = event.getPlayer();
 		String name = event.getPlayer().getName();
 
 		// Search for the UUID in the database
 
 		if(plugin.playerMap.containsKey(player_string)) {
 
-			// Get the CP name and coords
+			// New format. Get the CP name and coords
 
 			String sign = plugin.playerMap.get(player_string);
 			String[] split = plugin.signMap.get(sign).split(",");
@@ -460,7 +492,78 @@ public class PlayerListener implements Listener {
 
 			System.out.println("[MinrCheckpoint] " + name + " - " + player_string + " respawned at " + sign + " / " + plugin.signMap.get(sign));
 
+		} else if(plugin.playerMap.containsKey(name)) {
+
+			// Old format. Get the CP name and coords
+
+			String sign = plugin.playerMap.get(name);
+			String[] split = plugin.signMap.get(sign).split(",");
+
+			// Teleporting the player to his/her CP.
+
+			Location loc = new Location(plugin.server.getWorld(split[0]), Double.parseDouble(split[1]), Double.parseDouble(split[2]) + 1.0D, Double.parseDouble(split[3]));
+			event.setRespawnLocation(loc);
+
+			// Keeping @Barrack in the loop.
+
+			System.out.println("[MinrCheckpoint] " + name + " - " + player_string + " respawned at " + sign + " / " + plugin.signMap.get(sign));
+			
+			// Convert to new format. 
+			
+			playerConvert(player, name, player_string);
+			
 		}
+
+	}
+
+	// Convert old players data.
+	
+	public void playerConvert(Player player, String name, String player_string){
+
+		String tag = ChatColor.GRAY + "[" + ChatColor.WHITE + "MCP" + ChatColor.GRAY + "] ";
+		player.sendMessage(tag + ChatColor.GRAY + "Starting Converter for :");
+		player.sendMessage(tag + ChatColor.GRAY + name + " - " + player_string);
+
+		if(plugin.playerMap.containsKey(name)) {
+
+			String obj = plugin.playerMap.get(name);
+
+			plugin.playerMap.put(player_string, obj);
+			plugin.playerDB.setString(player_string, obj);
+			plugin.playerMap.remove(name);
+			plugin.playerDB.removeKey(name);
+
+			player.sendMessage(tag + ChatColor.GRAY + "Your CP has been updated to the new format.");
+
+		}
+
+		if(plugin.pointMap.containsKey(name)) {
+
+			String obj = plugin.pointMap.get(name);
+
+			plugin.pointMap.put(player_string, obj);
+			plugin.pointDB.setString(player_string, obj);
+			plugin.pointMap.remove(name);
+			plugin.pointDB.removeKey(name);
+
+			player.sendMessage(tag + ChatColor.GRAY + "Your FFA points have been updated to the new format.");
+
+		}
+
+		if(plugin.ffaMap.containsKey(name)) {
+
+			String obj = plugin.ffaMap.get(name);
+
+			plugin.ffaMap.put(player_string, obj);
+			plugin.ffaDB.setString(player_string, obj);
+			plugin.ffaMap.remove(name);
+			plugin.ffaDB.removeKey(name);
+
+			player.sendMessage(tag + ChatColor.GRAY + "Your FFA history has been updated to the new format.");
+
+		}
+
+		player.sendMessage(tag + ChatColor.GRAY + "All done. Ready to go.");
 
 	}
 
