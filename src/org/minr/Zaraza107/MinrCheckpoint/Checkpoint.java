@@ -167,7 +167,7 @@ public class Checkpoint extends JavaPlugin {
 
 		// Inform the player.
 
-		player.sendMessage(ChatColor.DARK_GREEN + "Checkpoint " + name + " saved!");
+		player.sendMessage(ChatColor.DARK_AQUA + "Checkpoint " + name + " saved!");
 
 		// Let @Barrack know.
 
@@ -204,7 +204,7 @@ public class Checkpoint extends JavaPlugin {
 
 			// CP not found.
 
-			player.sendMessage(ChatColor.DARK_AQUA + "No such checkpoint in the database.");
+			player.sendMessage(ChatColor.RED + "No such checkpoint in the database.");
 
 		}
 
@@ -221,80 +221,93 @@ public class Checkpoint extends JavaPlugin {
 
 		// Get a UUID for the player to remove. From cache or mojang.com.
 
-		String player_id = UUIDManager.getUUIDFromPlayer(name).toString();
+		UUID player_uuid = UUIDManager.getUUIDFromPlayer(name);
+		if (player_uuid == null) {
 
-		// Does the player have a CP?
+			// Unknown player.
 
-		if(this.playerMap.containsKey(player_id)) {
-
-			// If so, remove it.
-
-			this.playerMap.remove(player_id);
-			this.playerDB.removeKey(player_id);
-
-			// Inform the player.
-
-			player.sendMessage(ChatColor.DARK_AQUA + name + " / " + player_id + " removed from the CP database.");
-
-			// Let @Barrack know.
-
-			System.out.println("[MinrCheckpoint] " + p + " removed the CP of player " + name + " / " + player_id);
+			player.sendMessage(ChatColor.RED + "Unknown Mojang player.");
 
 		} else {
 
-			// Nothing found in this DB.
+			// Convert UUID to string format.
 
-			player.sendMessage(ChatColor.DARK_AQUA + "No such player in the CP database.");
+			String player_id = player_uuid.toString();
 
-		}
+			// Does the player have a CP?
 
-		// Does the player have points?
+			if(this.playerMap.containsKey(player_id)) {
 
-		if(this.pointMap.containsKey(player_id)) {
+				// If so, remove it.
 
-			// If so, remove it.
+				this.playerMap.remove(player_id);
+				this.playerDB.removeKey(player_id);
 
-			this.pointDB.removeKey(player_id);
-			this.pointMap.remove(player_id);
+				// Inform the player.
 
-			// Inform the player.
+				player.sendMessage(ChatColor.DARK_AQUA + name + " / " + player_id + " removed from the CP database.");
 
-			player.sendMessage(ChatColor.DARK_AQUA + name + " / " + player_id + " removed from the Points database.");
+				// Let @Barrack know.
 
-			// Let @Barrack know.
+				System.out.println("[MinrCheckpoint] " + p + " removed the CP of player " + name + " / " + player_id);
 
-			System.out.println("[MinrCheckpoint] " + p + " removed the points of player " + name + " / " + player_id);
+			} else {
 
-		} else {
+				// Nothing found in this DB.
 
-			// Nothing found in this DB.
+				player.sendMessage(ChatColor.RED + "No such player in the CP database.");
 
-			player.sendMessage(ChatColor.DARK_AQUA + "No such player in the Points database.");
+			}
 
-		}
+			// Does the player have points?
 
-		// Does the player have a FFA history?
+			if(this.pointMap.containsKey(player_id)) {
 
-		if(this.ffaMap.containsKey(player_id)) {
+				// If so, remove it.
 
-			// If so, remove it.
+				this.pointDB.removeKey(player_id);
+				this.pointMap.remove(player_id);
 
-			this.ffaDB.removeKey(player_id);
-			this.ffaMap.remove(player_id);
+				// Inform the player.
 
-			// Inform the player.
+				player.sendMessage(ChatColor.DARK_AQUA + name + " / " + player_id + " removed from the Points database.");
 
-			player.sendMessage(ChatColor.DARK_AQUA + name + " / " + player_id + " removed from the FFA database.");
+				// Let @Barrack know.
 
-			// Let @Barrack know.
+				System.out.println("[MinrCheckpoint] " + p + " removed the points of player " + name + " / " + player_id);
 
-			System.out.println("[MinrCheckpoint] " + p + " removed the FFA history of player " + name + " / " + player_id);
+			} else {
 
-		} else {
+				// Nothing found in this DB.
 
-			// Nothing found in this DB.
+				player.sendMessage(ChatColor.RED + "No such player in the Points database.");
 
-			player.sendMessage(ChatColor.DARK_AQUA + "No such player in the FFA database.");
+			}
+
+			// Does the player have a FFA history?
+
+			if(this.ffaMap.containsKey(player_id)) {
+
+				// If so, remove it.
+
+				this.ffaDB.removeKey(player_id);
+				this.ffaMap.remove(player_id);
+
+				// Inform the player.
+
+				player.sendMessage(ChatColor.DARK_AQUA + name + " / " + player_id + " removed from the FFA database.");
+
+				// Let @Barrack know.
+
+				System.out.println("[MinrCheckpoint] " + p + " removed the FFA history of player " + name + " / " + player_id);
+
+			} else {
+
+				// Nothing found in this DB.
+
+				player.sendMessage(ChatColor.RED + "No such player in the FFA database.");
+
+			}
 
 		}
 
@@ -312,81 +325,101 @@ public class Checkpoint extends JavaPlugin {
 
 		// Get the player name for the UUID to remove. From cache or mojang.com.
 
+		if (!isValid(player_id)) {
+
+			// Does it look like a valid UUID? If not, abort.
+
+			player.sendMessage(ChatColor.RED + "Bad UUID format.");
+
+			return true;
+
+		}
+
 		UUID player_uuid = UUID.fromString(player_id);
 		String player_name = UUIDManager.getPlayerFromUUID(player_uuid);
 
-		// Does the player have a CP?
+		if (player_name == null) {
 
-		if(this.playerMap.containsKey(player_id)) {
+			// Unknown player.
 
-			// If so, remove it.
-
-			this.playerMap.remove(player_id);
-			this.playerDB.removeKey(player_id);
-
-			// Inform the player.
-
-			player.sendMessage(ChatColor.DARK_AQUA + player_name + " / " + player_id + " removed from the CP database.");
-
-			// Let @Barrack know.
-
-			System.out.println("[MinrCheckpoint] " + p + " removed the CP of player " + player_name + " / " + player_id);
+			player.sendMessage(ChatColor.RED + "Unknown Mojang UUID.");
 
 		} else {
 
-			// Nothing found in this DB.
-
-			player.sendMessage(ChatColor.DARK_AQUA + "No such player in the CP database.");
-
-		}
-
-		// Does the player have points?
-
-		if(this.pointMap.containsKey(player_id)) {
-
-			// If so, remove it.
-
-			this.pointDB.removeKey(player_id);
-			this.pointMap.remove(player_id);
-
-			// Inform the player.
-
-			player.sendMessage(ChatColor.DARK_AQUA + player_name + " / " + player_id + " removed from the Points database.");
-
-			// Let @Barrack know.
-
-			System.out.println("[MinrCheckpoint] " + p + " removed the points of player " + player_name + " / " + player_id);
-
-		} else {
-
-			// Nothing found in this DB.
-
-			player.sendMessage(ChatColor.DARK_AQUA + "No such player in the Points database.");
-
-		}
-
-		// Does the player have a FFA history?
-
-		if(this.ffaMap.containsKey(player_id)) {
-
-			// If so, remove it.
-
-			this.ffaDB.removeKey(player_id);
-			this.ffaMap.remove(player_id);
-
-			// Inform the player.
-
-			player.sendMessage(ChatColor.DARK_AQUA + player_name + " / " + player_id + " removed from the FFA database.");
-
-			// Let @Barrack know.
-
-			System.out.println("[MinrCheckpoint] " + p + " removed the FFA history of player " + player_name + " / " + player_id);
-
-		} else {
-
-			// Nothing found in this DB.
-
-			player.sendMessage(ChatColor.DARK_AQUA + "No such player in the FFA database.");
+			// Does the player have a CP?
+	
+			if(this.playerMap.containsKey(player_id)) {
+	
+				// If so, remove it.
+	
+				this.playerMap.remove(player_id);
+				this.playerDB.removeKey(player_id);
+	
+				// Inform the player.
+	
+				player.sendMessage(ChatColor.DARK_AQUA + player_name + " / " + player_id + " removed from the CP database.");
+	
+				// Let @Barrack know.
+	
+				System.out.println("[MinrCheckpoint] " + p + " removed the CP of player " + player_name + " / " + player_id);
+	
+			} else {
+	
+				// Nothing found in this DB.
+	
+				player.sendMessage(ChatColor.RED + "No such player in the CP database.");
+	
+			}
+	
+			// Does the player have points?
+	
+			if(this.pointMap.containsKey(player_id)) {
+	
+				// If so, remove it.
+	
+				this.pointDB.removeKey(player_id);
+				this.pointMap.remove(player_id);
+	
+				// Inform the player.
+	
+				player.sendMessage(ChatColor.DARK_AQUA + player_name + " / " + player_id + " removed from the Points database.");
+	
+				// Let @Barrack know.
+	
+				System.out.println("[MinrCheckpoint] " + p + " removed the points of player " + player_name + " / " + player_id);
+	
+			} else {
+	
+				// Nothing found in this DB.
+	
+				player.sendMessage(ChatColor.RED + "No such player in the Points database.");
+	
+			}
+	
+			// Does the player have a FFA history?
+	
+			if(this.ffaMap.containsKey(player_id)) {
+	
+				// If so, remove it.
+	
+				this.ffaDB.removeKey(player_id);
+				this.ffaMap.remove(player_id);
+	
+				// Inform the player.
+	
+				player.sendMessage(ChatColor.DARK_AQUA + player_name + " / " + player_id + " removed from the FFA database.");
+	
+				// Let @Barrack know.
+	
+				System.out.println("[MinrCheckpoint] " + p + " removed the FFA history of player " + player_name + " / " + player_id);
+	
+			} else {
+	
+				// Nothing found in this DB.
+	
+				player.sendMessage(ChatColor.RED + "No such player in the FFA database.");
+	
+			}
 
 		}
 
@@ -402,12 +435,26 @@ public class Checkpoint extends JavaPlugin {
 
 			// There is a second argument. Get the UUID for that name.
 
-			String player_id = UUIDManager.getUUIDFromPlayer(msg[1]).toString();
+			UUID player_uuid = UUIDManager.getUUIDFromPlayer(msg[1]);
 
-			if(this.playerMap.containsKey(player_id))
-				player.sendMessage(ChatColor.DARK_AQUA + msg[1] + " has a CP at " + this.playerMap.get(player_id));
-			else
-				player.sendMessage(ChatColor.DARK_AQUA + msg[1] + " has no CP.");
+			if (player_uuid == null) {
+
+				// Unknown player.
+
+				player.sendMessage(ChatColor.RED + "Unknown Mojang player.");
+
+			} else {
+
+				// We have an ID. Looking it up in our files.
+
+				String player_id = player_uuid.toString();
+
+				if(this.playerMap.containsKey(player_id))
+					player.sendMessage(ChatColor.DARK_AQUA + msg[1] + " has a CP at " + this.playerMap.get(player_id));
+				else
+					player.sendMessage(ChatColor.DARK_AQUA + msg[1] + " has no CP.");
+
+			}
 
 		} else {
 
@@ -434,12 +481,26 @@ public class Checkpoint extends JavaPlugin {
 
 			// There is a second argument. Get the UUID for that name.
 
-			String player_id = UUIDManager.getUUIDFromPlayer(msg[1]).toString();
+			UUID player_uuid = UUIDManager.getUUIDFromPlayer(msg[1]);
 
-			if(this.pointMap.containsKey(player_id))
-				player.sendMessage(ChatColor.DARK_AQUA + msg[1] + " has " + this.pointMap.get(player_id) + " points");
-			else
-				player.sendMessage(ChatColor.DARK_AQUA + msg[1] + " has no point");
+			if (player_uuid == null) {
+
+				// Unknown player.
+
+				player.sendMessage(ChatColor.RED + "Unknown Mojang player.");
+
+			} else {
+
+				// We have an ID. Looking it up in our files.
+
+				String player_id = player_uuid.toString();
+
+				if(this.pointMap.containsKey(player_id))
+					player.sendMessage(ChatColor.DARK_AQUA + msg[1] + " has " + this.pointMap.get(player_id) + " points");
+				else
+					player.sendMessage(ChatColor.DARK_AQUA + msg[1] + " has no point");
+
+			}
 
 		} else {
 
@@ -466,12 +527,26 @@ public class Checkpoint extends JavaPlugin {
 
 			// There is a second argument. Get the UUID for that name.
 
-			String player_id = UUIDManager.getUUIDFromPlayer(msg[1]).toString();
+			UUID player_uuid = UUIDManager.getUUIDFromPlayer(msg[1]);
 
-			if(this.ffaMap.containsKey(player_id))
-				player.sendMessage(ChatColor.DARK_AQUA + msg[1] + " completed : " + this.ffaMap.get(player_id));
-			else
-				player.sendMessage(ChatColor.DARK_AQUA + msg[1] + " did not complete a FFA level yet.");
+			if (player_uuid == null) {
+
+				// Unknown player.
+
+				player.sendMessage(ChatColor.RED + "Unknown Mojang player.");
+
+			} else {
+
+				// We have an ID. Looking it up in our files.
+
+				String player_id = player_uuid.toString();
+
+				if(this.ffaMap.containsKey(player_id))
+					player.sendMessage(ChatColor.DARK_AQUA + msg[1] + " completed : " + this.ffaMap.get(player_id));
+				else
+					player.sendMessage(ChatColor.DARK_AQUA + msg[1] + " did not complete a FFA level yet.");
+
+			}
 
 		} else {
 
@@ -500,25 +575,37 @@ public class Checkpoint extends JavaPlugin {
 
 		// Get a UUID for the player. From cache or mojang.com.
 
-		String player_id = UUIDManager.getUUIDFromPlayer(name).toString();
+		UUID player_uuid = UUIDManager.getUUIDFromPlayer(name);
 
-		// Change the player's points in the DB.
+		if (player_uuid == null) {
 
-		this.pointDB.setString(player_id, value);
-		this.pointMap.put(player_id, value);
+			// Unknown player.
 
-		// Inform the player.
+			player.sendMessage(ChatColor.RED + "Unknown Mojang player.");
 
-		player.sendMessage(ChatColor.DARK_AQUA + name + " / " + player_id + " has now " + value + " point(s).");
+		} else {
 
-		// Let @Barrack know.
+			// Change the player's points in the DB.
 
-		System.out.println("[MinrCheckpoint] " + p + " gave " + name + " / " + player_id + " : " + value + " point(s)");
+			String player_id = player_uuid.toString();
+
+			this.pointDB.setString(player_id, value);
+			this.pointMap.put(player_id, value);
+
+			// Inform the player.
+
+			player.sendMessage(ChatColor.DARK_AQUA + name + " / " + player_id + " has now " + value + " point(s).");
+
+			// Let @Barrack know.
+
+			System.out.println("[MinrCheckpoint] " + p + " gave " + name + " / " + player_id + " : " + value + " point(s)");
+
+		}
 
 		return true;
 
 	}
-	
+
 	// Change a UUID's points.
 
 	public boolean giveid(Player player, String player_id, String value) {
@@ -529,21 +616,41 @@ public class Checkpoint extends JavaPlugin {
 
 		// Get the player name for the UUID. From cache or mojang.com.
 
+		if (!isValid(player_id)) {
+
+			// Does it look like a valid UUID? If not, abort.
+
+			player.sendMessage(ChatColor.RED + "Bad UUID format.");
+
+			return true;
+
+		}
+
 		UUID player_uuid = UUID.fromString(player_id);
 		String player_name = UUIDManager.getPlayerFromUUID(player_uuid);
 
-		// Change the player's points in the DB.
+		if (player_name == null) {
 
-		this.pointDB.setString(player_id, value);
-		this.pointMap.put(player_id, value);
+			// Unknown player.
 
-		// Inform the player.
+			player.sendMessage(ChatColor.RED + "Unknown Mojang UUID.");
 
-		player.sendMessage(ChatColor.DARK_AQUA + player_name + " / " + player_id + " has now " + value + " point(s).");
+		} else {
 
-		// Let @Barrack know.
+			// Change the player's points in the DB.
 
-		System.out.println("[MinrCheckpoint] " + p + " gave " + player_name + " / " + player_id + " " + value + " point(s)");
+			this.pointDB.setString(player_id, value);
+			this.pointMap.put(player_id, value);
+
+			// Inform the player.
+
+			player.sendMessage(ChatColor.DARK_AQUA + player_name + " / " + player_id + " has now " + value + " point(s).");
+
+			// Let @Barrack know.
+
+			System.out.println("[MinrCheckpoint] " + p + " gave " + player_name + " / " + player_id + " " + value + " point(s)");
+
+		}
 
 		return true;
 
@@ -559,46 +666,64 @@ public class Checkpoint extends JavaPlugin {
 
 		// Get a UUID for the player. From cache or mojang.com.
 
-		String player_id = UUIDManager.getUUIDFromPlayer(name).toString();
+		UUID player_uuid = UUIDManager.getUUIDFromPlayer(name);
 
-		// Check if the checkpoint on the 3rd line is in the database
+		if (player_uuid == null) {
 
-		if(this.signMap.containsKey(value)) {
+			// Unknown player.
 
-			// Check if the player has a CP.
+			player.sendMessage(ChatColor.DARK_AQUA + "Unknown Mojang player.");
 
-			if(this.playerMap.containsKey(player_id)) {
+		} else {
 
-				String saved_cp = this.playerMap.get(player_id);
+			String player_id = player_uuid.toString();
 
-				if(saved_cp.equalsIgnoreCase(value)) {
+			// Check if the checkpoint on the 3rd line is in the database
 
-					// If the player already set this CP:
+			if(this.signMap.containsKey(value)) {
 
-					player.sendMessage(ChatColor.DARK_AQUA + "Player already has this checkpoint.");
+				// Check if the player has a CP.
 
-				} else {
+				if(this.playerMap.containsKey(player_id)) {
 
-					// If the player has another CP, remove it.
-	
-					this.playerMap.remove(saved_cp);
+					String saved_cp = this.playerMap.get(player_id);
+
+					if(saved_cp.equalsIgnoreCase(value)) {
+
+						// If the player already set this CP:
+
+						player.sendMessage(ChatColor.DARK_AQUA + "Player already has this checkpoint.");
+
+					} else {
+
+						// If the player has another CP, remove it.
+
+						this.playerMap.remove(saved_cp);
+
+					}
 
 				}
 
+				// Set a new CP for this player.
+
+				this.playerMap.put(player_id, value);
+				this.playerDB.setString(player_id, value);
+
+				// Inform the player.
+
+				player.sendMessage(ChatColor.DARK_AQUA + name + " / " + player_id + " has a new CP at " + value);
+
+				// Let @Barrack know.
+
+				System.out.println("[MinrCheckpoint] " + p + " set the CP of " + name + " / " + player_id + " at : " + value);
+
+			} else {
+
+				// Checkpoint not found in files.
+
+				player.sendMessage(ChatColor.DARK_AQUA + "Unknown checkpoint.");
+
 			}
-
-			// Set a new CP for this player.
-
-			this.playerMap.put(player_id, value);
-			this.playerDB.setString(player_id, value);
-
-			// Inform the player.
-
-			player.sendMessage(ChatColor.DARK_AQUA + name + " / " + player_id + " has a new CP at " + value);
-
-			// Let @Barrack know.
-
-			System.out.println("[MinrCheckpoint] " + p + " set the CP of " + name + " / " + player_id + " at : " + value);
 
 		}
 
@@ -639,6 +764,12 @@ public class Checkpoint extends JavaPlugin {
 
 		return true;
 
+	}
+
+	// Is it a valid UUID ?
+
+	public boolean isValid(String uuid){
+		return uuid.matches("[0-9a-fA-F]{8}(?:-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}");
 	}
 
 }
