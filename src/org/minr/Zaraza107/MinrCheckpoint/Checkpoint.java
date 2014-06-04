@@ -765,26 +765,29 @@ public class Checkpoint extends JavaPlugin {
 
 			// Show the commands available to Ops.
 
-			player.sendMessage(ChatColor.GOLD + "MinrCheckpoint - Ops commands :");
-			player.sendMessage(ChatColor.GOLD + "/checkpoint create <warp-name> <x> <y> <z>");
-			player.sendMessage(ChatColor.GOLD + "/checkpoint delete <warp-name>");
-			player.sendMessage(ChatColor.GOLD + "/checkpoint cp <player-name>");
-			player.sendMessage(ChatColor.GOLD + "/checkpoint ffa <player-name>");
-			player.sendMessage(ChatColor.GOLD + "/checkpoint points <player-name>");
-			player.sendMessage(ChatColor.GOLD + "/checkpoint give <player-name> <amount>");
-			player.sendMessage(ChatColor.GOLD + "/checkpoint giveid <UUID> <amount>");
-			player.sendMessage(ChatColor.GOLD + "/checkpoint set <player-name> <checkpoint>");
-			player.sendMessage(ChatColor.GOLD + "/checkpoint remove <player-name>");
-			player.sendMessage(ChatColor.GOLD + "/checkpoint removeid <UUID>");
+			player.sendMessage(wtag + ChatColor.GRAY + "MinrCheckpoint - Ops commands :");
+			player.sendMessage(stag + ChatColor.WHITE + "/checkpoint create " + ChatColor.GRAY + "<warp-name> <x> <y> <z>");
+			player.sendMessage(stag + ChatColor.WHITE + "/checkpoint delete " + ChatColor.GRAY + "<warp-name>");
+			player.sendMessage(stag + ChatColor.WHITE + "/checkpoint cp " + ChatColor.GRAY + "<player-name>");
+			player.sendMessage(stag + ChatColor.WHITE + "/checkpoint ffa " + ChatColor.GRAY + "<player-name>");
+			player.sendMessage(stag + ChatColor.WHITE + "/checkpoint points " + ChatColor.GRAY + "<player-name>");
+			player.sendMessage(stag + ChatColor.WHITE + "/checkpoint give " + ChatColor.GRAY + "<player-name> <amount>");
+			player.sendMessage(stag + ChatColor.WHITE + "/checkpoint giveid " + ChatColor.GRAY + "<UUID> <amount>");
+			player.sendMessage(stag + ChatColor.WHITE + "/checkpoint set " + ChatColor.GRAY + "<player-name> <checkpoint>");
+			player.sendMessage(stag + ChatColor.WHITE + "/checkpoint remove " + ChatColor.GRAY + "<player-name>");
+			player.sendMessage(stag + ChatColor.WHITE + "/checkpoint removeid " + ChatColor.GRAY + "<UUID>");
+			player.sendMessage(stag + ChatColor.WHITE + "/checkpoint convert " + ChatColor.GRAY + "<playername>");
 
 		} else {
 
 			// Show the commands available to non-Ops.
 
-			player.sendMessage(ChatColor.GOLD + "MinrCheckpoint - Commands :");
-			player.sendMessage(ChatColor.GOLD + "/checkpoint cp <player-name>");
-			player.sendMessage(ChatColor.GOLD + "/checkpoint ffa <player-name>");
-			player.sendMessage(ChatColor.GOLD + "/checkpoint points <player-name>");
+			player.sendMessage(wtag + ChatColor.GRAY + "MinrCheckpoint - Commands :");
+			player.sendMessage(stag + ChatColor.WHITE + "/checkpoint cp " + ChatColor.GRAY + "<player-name>");
+			player.sendMessage(stag + ChatColor.WHITE + "/checkpoint ffa " + ChatColor.GRAY + "<player-name>");
+			player.sendMessage(stag + ChatColor.WHITE + "/checkpoint points " + ChatColor.GRAY + "<player-name>");
+			player.sendMessage(wtag + ChatColor.WHITE + "In case you lost your points or ffa history :");			
+			player.sendMessage(wtag + ChatColor.WHITE + "/checkpoint convert");
 
 		}
 
