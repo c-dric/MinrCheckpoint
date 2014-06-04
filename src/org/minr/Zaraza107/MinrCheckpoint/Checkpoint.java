@@ -29,6 +29,26 @@ public class Checkpoint extends JavaPlugin {
 	public int pointsReq;
 	public Plugin mBPermissionsApi; //Nickman Interface with bPermission
 
+	// Set standard tag.
+
+	String stag = ChatColor.GRAY + "[" + ChatColor.WHITE + "MCP" + ChatColor.GRAY + "] ";
+
+	// Set warning tag.
+
+	String wtag = ChatColor.GRAY + "[" + ChatColor.YELLOW + "MCP" + ChatColor.GRAY + "] ";
+
+	// Set error tag.
+
+	String etag = ChatColor.GRAY + "[" + ChatColor.RED + "MCP" + ChatColor.GRAY + "] ";
+
+	// Set HC completion tag
+
+	String gtag = ChatColor.GRAY + "[" + ChatColor.GREEN + "MCP" + ChatColor.GRAY + "] ";
+
+	// Set blue tag
+
+	String btag = ChatColor.GRAY + "[" + ChatColor.AQUA + "MCP" + ChatColor.GRAY + "] ";
+	
 	// What to do on plugin load.
 
 	public void onEnable() {
@@ -101,7 +121,13 @@ public class Checkpoint extends JavaPlugin {
 				return ffa(player, args);
 
 			else if(args[0].equalsIgnoreCase("help"))
-				return help(player);			
+				return help(player);
+
+			else if(args[0].equalsIgnoreCase("convert"))
+				return convert(player, args);
+
+			else if((args[0].equalsIgnoreCase("convert")) && (sender.isOp()) && (args.length == 2))
+				return create(player, args[1], Double.parseDouble(args[2]), Double.parseDouble(args[3]), Double.parseDouble(args[4]));
 
 			else if((args[0].equalsIgnoreCase("create")) && (sender.isOp()) && (args.length > 4))
 				return create(player, args[1], Double.parseDouble(args[2]), Double.parseDouble(args[3]), Double.parseDouble(args[4]));
@@ -125,7 +151,7 @@ public class Checkpoint extends JavaPlugin {
 				return set(player, args[1], args[2]);
 
 			else if (args[0].length() < 1)
-				return help(player);			
+				return help(player);
 
 			else
 				return help(player);
@@ -133,7 +159,7 @@ public class Checkpoint extends JavaPlugin {
 		} catch(Exception e) {
 
 			if(e instanceof NumberFormatException) {
-				sender.sendMessage(ChatColor.RED + "Coordinates are in the wrong format!");
+				sender.sendMessage(etag + ChatColor.GRAY + "Coordinates are in the wrong format!");
 
 			}
 
@@ -167,7 +193,7 @@ public class Checkpoint extends JavaPlugin {
 
 		// Inform the player.
 
-		player.sendMessage(ChatColor.DARK_AQUA + "Checkpoint " + name + " saved!");
+		player.sendMessage(stag + ChatColor.GRAY + "Checkpoint " + name + " saved!");
 
 		// Let @Barrack know.
 
@@ -193,7 +219,7 @@ public class Checkpoint extends JavaPlugin {
 
 			// Inform the player.
 
-			player.sendMessage(ChatColor.DARK_AQUA + "Checkpoint " + name + " removed from database :)");
+			player.sendMessage(stag + ChatColor.GRAY + "Checkpoint " + name + " removed from database.");
 
 			// Let @Barrack know.
 
@@ -245,7 +271,7 @@ public class Checkpoint extends JavaPlugin {
 
 				// Inform the player.
 
-				player.sendMessage(ChatColor.DARK_AQUA + name + " / " + player_id + " removed from the CP database.");
+				player.sendMessage(stag + ChatColor.GRAY + name + " / " + player_id + " removed from the CP database.");
 
 				// Let @Barrack know.
 
@@ -255,7 +281,7 @@ public class Checkpoint extends JavaPlugin {
 
 				// Nothing found in this DB.
 
-				player.sendMessage(ChatColor.RED + "No such player in the CP database.");
+				player.sendMessage(etag + ChatColor.GRAY + "No such player in the CP database.");
 
 			}
 
@@ -270,7 +296,7 @@ public class Checkpoint extends JavaPlugin {
 
 				// Inform the player.
 
-				player.sendMessage(ChatColor.DARK_AQUA + name + " / " + player_id + " removed from the Points database.");
+				player.sendMessage(stag + ChatColor.GRAY + name + " / " + player_id + " removed from the Points database.");
 
 				// Let @Barrack know.
 
@@ -280,7 +306,7 @@ public class Checkpoint extends JavaPlugin {
 
 				// Nothing found in this DB.
 
-				player.sendMessage(ChatColor.RED + "No such player in the Points database.");
+				player.sendMessage(etag + ChatColor.GRAY + "No such player in the Points database.");
 
 			}
 
@@ -295,7 +321,7 @@ public class Checkpoint extends JavaPlugin {
 
 				// Inform the player.
 
-				player.sendMessage(ChatColor.DARK_AQUA + name + " / " + player_id + " removed from the FFA database.");
+				player.sendMessage(stag + ChatColor.GRAY + name + " / " + player_id + " removed from the FFA database.");
 
 				// Let @Barrack know.
 
@@ -305,7 +331,7 @@ public class Checkpoint extends JavaPlugin {
 
 				// Nothing found in this DB.
 
-				player.sendMessage(ChatColor.RED + "No such player in the FFA database.");
+				player.sendMessage(etag + ChatColor.GRAY + "No such player in the FFA database.");
 
 			}
 
@@ -329,7 +355,7 @@ public class Checkpoint extends JavaPlugin {
 
 			// Does it look like a valid UUID? If not, abort.
 
-			player.sendMessage(ChatColor.RED + "Bad UUID format.");
+			player.sendMessage(etag + ChatColor.GRAY + "Bad UUID format.");
 
 			return true;
 
@@ -342,7 +368,7 @@ public class Checkpoint extends JavaPlugin {
 
 			// Unknown player.
 
-			player.sendMessage(ChatColor.RED + "Unknown Mojang UUID.");
+			player.sendMessage(etag + ChatColor.GRAY + "Unknown Mojang UUID.");
 
 		} else {
 
@@ -357,7 +383,7 @@ public class Checkpoint extends JavaPlugin {
 	
 				// Inform the player.
 	
-				player.sendMessage(ChatColor.DARK_AQUA + player_name + " / " + player_id + " removed from the CP database.");
+				player.sendMessage(stag + ChatColor.GRAY + player_name + " / " + player_id + " removed from the CP database.");
 	
 				// Let @Barrack know.
 	
@@ -367,7 +393,7 @@ public class Checkpoint extends JavaPlugin {
 	
 				// Nothing found in this DB.
 	
-				player.sendMessage(ChatColor.RED + "No such player in the CP database.");
+				player.sendMessage(etag + ChatColor.GRAY + "No such player in the CP database.");
 	
 			}
 	
@@ -382,7 +408,7 @@ public class Checkpoint extends JavaPlugin {
 	
 				// Inform the player.
 	
-				player.sendMessage(ChatColor.DARK_AQUA + player_name + " / " + player_id + " removed from the Points database.");
+				player.sendMessage(stag + ChatColor.GRAY + player_name + " / " + player_id + " removed from the Points database.");
 	
 				// Let @Barrack know.
 	
@@ -392,7 +418,7 @@ public class Checkpoint extends JavaPlugin {
 	
 				// Nothing found in this DB.
 	
-				player.sendMessage(ChatColor.RED + "No such player in the Points database.");
+				player.sendMessage(etag + ChatColor.GRAY + "No such player in the Points database.");
 	
 			}
 	
@@ -407,7 +433,7 @@ public class Checkpoint extends JavaPlugin {
 	
 				// Inform the player.
 	
-				player.sendMessage(ChatColor.DARK_AQUA + player_name + " / " + player_id + " removed from the FFA database.");
+				player.sendMessage(stag + ChatColor.GRAY + player_name + " / " + player_id + " removed from the FFA database.");
 	
 				// Let @Barrack know.
 	
@@ -417,7 +443,7 @@ public class Checkpoint extends JavaPlugin {
 	
 				// Nothing found in this DB.
 	
-				player.sendMessage(ChatColor.RED + "No such player in the FFA database.");
+				player.sendMessage(etag + ChatColor.GRAY + "No such player in the FFA database.");
 	
 			}
 
@@ -441,7 +467,7 @@ public class Checkpoint extends JavaPlugin {
 
 				// Unknown player.
 
-				player.sendMessage(ChatColor.RED + "Unknown Mojang player.");
+				player.sendMessage(etag + ChatColor.GRAY + "Unknown Mojang player.");
 
 			} else {
 
@@ -450,9 +476,9 @@ public class Checkpoint extends JavaPlugin {
 				String player_id = player_uuid.toString();
 
 				if(this.playerMap.containsKey(player_id))
-					player.sendMessage(ChatColor.DARK_AQUA + msg[1] + " has a CP at " + this.playerMap.get(player_id));
+					player.sendMessage(stag + ChatColor.GRAY + msg[1] + " has a CP at " + this.playerMap.get(player_id));
 				else
-					player.sendMessage(ChatColor.DARK_AQUA + msg[1] + " has no CP.");
+					player.sendMessage(stag + ChatColor.GRAY + msg[1] + " has no CP.");
 
 			}
 
@@ -463,9 +489,9 @@ public class Checkpoint extends JavaPlugin {
 			String player_id = UUIDManager.getUUIDFromPlayer(player.getName()).toString();
 
 			if(this.playerMap.containsKey(player_id))
-				player.sendMessage(ChatColor.DARK_AQUA + "You have a CP at " + this.playerMap.get(player_id));
+				player.sendMessage(stag + ChatColor.GRAY + "You have a CP at " + this.playerMap.get(player_id));
 			else
-				player.sendMessage(ChatColor.DARK_AQUA + "You have no CP.");
+				player.sendMessage(stag + ChatColor.GRAY + "You have no CP.");
 
 		}
 
@@ -487,7 +513,7 @@ public class Checkpoint extends JavaPlugin {
 
 				// Unknown player.
 
-				player.sendMessage(ChatColor.RED + "Unknown Mojang player.");
+				player.sendMessage(etag + ChatColor.GRAY + "Unknown Mojang player.");
 
 			} else {
 
@@ -496,9 +522,9 @@ public class Checkpoint extends JavaPlugin {
 				String player_id = player_uuid.toString();
 
 				if(this.pointMap.containsKey(player_id))
-					player.sendMessage(ChatColor.DARK_AQUA + msg[1] + " has " + this.pointMap.get(player_id) + " points");
+					player.sendMessage(stag + ChatColor.GRAY + msg[1] + " has " + this.pointMap.get(player_id) + " points");
 				else
-					player.sendMessage(ChatColor.DARK_AQUA + msg[1] + " has no point");
+					player.sendMessage(stag + ChatColor.GRAY + msg[1] + " has no point");
 
 			}
 
@@ -509,9 +535,9 @@ public class Checkpoint extends JavaPlugin {
 			String player_id = UUIDManager.getUUIDFromPlayer(player.getName()).toString();
 
 			if(this.pointMap.containsKey(player_id))
-				player.sendMessage(ChatColor.DARK_AQUA + "You have " + this.pointMap.get(player_id) + " points");
+				player.sendMessage(stag + ChatColor.GRAY + "You have " + this.pointMap.get(player_id) + " points");
 			else
-				player.sendMessage(ChatColor.DARK_AQUA + "You have no points");
+				player.sendMessage(stag + ChatColor.GRAY + "You have no points");
 
 		}
 
@@ -533,7 +559,7 @@ public class Checkpoint extends JavaPlugin {
 
 				// Unknown player.
 
-				player.sendMessage(ChatColor.RED + "Unknown Mojang player.");
+				player.sendMessage(etag + ChatColor.GRAY + "Unknown Mojang player.");
 
 			} else {
 
@@ -542,9 +568,9 @@ public class Checkpoint extends JavaPlugin {
 				String player_id = player_uuid.toString();
 
 				if(this.ffaMap.containsKey(player_id))
-					player.sendMessage(ChatColor.DARK_AQUA + msg[1] + " completed : " + this.ffaMap.get(player_id));
+					player.sendMessage(stag + ChatColor.GRAY + msg[1] + " completed : " + this.ffaMap.get(player_id));
 				else
-					player.sendMessage(ChatColor.DARK_AQUA + msg[1] + " did not complete a FFA level yet.");
+					player.sendMessage(stag + ChatColor.GRAY + msg[1] + " did not complete a FFA level yet.");
 
 			}
 
@@ -555,9 +581,9 @@ public class Checkpoint extends JavaPlugin {
 			String player_id = UUIDManager.getUUIDFromPlayer(player.getName()).toString();
 
 			if(this.ffaMap.containsKey(player_id))
-				player.sendMessage(ChatColor.DARK_AQUA + "You have completed : " + this.ffaMap.get(player_id));
+				player.sendMessage(stag + ChatColor.GRAY + "You have completed : " + this.ffaMap.get(player_id));
 			else
-				player.sendMessage(ChatColor.DARK_AQUA + "You did not complete a FFA level yet.");			
+				player.sendMessage(stag + ChatColor.GRAY + "You did not complete a FFA level yet.");			
 
 		}
 
@@ -581,7 +607,7 @@ public class Checkpoint extends JavaPlugin {
 
 			// Unknown player.
 
-			player.sendMessage(ChatColor.RED + "Unknown Mojang player.");
+			player.sendMessage(etag + ChatColor.GRAY + "Unknown Mojang player.");
 
 		} else {
 
@@ -594,7 +620,7 @@ public class Checkpoint extends JavaPlugin {
 
 			// Inform the player.
 
-			player.sendMessage(ChatColor.DARK_AQUA + name + " / " + player_id + " has now " + value + " point(s).");
+			player.sendMessage(stag + ChatColor.GRAY + name + " / " + player_id + " has now " + value + " point(s).");
 
 			// Let @Barrack know.
 
@@ -620,7 +646,7 @@ public class Checkpoint extends JavaPlugin {
 
 			// Does it look like a valid UUID? If not, abort.
 
-			player.sendMessage(ChatColor.RED + "Bad UUID format.");
+			player.sendMessage(etag + ChatColor.GRAY + "Bad UUID format.");
 
 			return true;
 
@@ -633,7 +659,7 @@ public class Checkpoint extends JavaPlugin {
 
 			// Unknown player.
 
-			player.sendMessage(ChatColor.RED + "Unknown Mojang UUID.");
+			player.sendMessage(etag + ChatColor.GRAY + "Unknown Mojang UUID.");
 
 		} else {
 
@@ -644,7 +670,7 @@ public class Checkpoint extends JavaPlugin {
 
 			// Inform the player.
 
-			player.sendMessage(ChatColor.DARK_AQUA + player_name + " / " + player_id + " has now " + value + " point(s).");
+			player.sendMessage(stag + ChatColor.GRAY + player_name + " / " + player_id + " has now " + value + " point(s).");
 
 			// Let @Barrack know.
 
@@ -672,7 +698,7 @@ public class Checkpoint extends JavaPlugin {
 
 			// Unknown player.
 
-			player.sendMessage(ChatColor.DARK_AQUA + "Unknown Mojang player.");
+			player.sendMessage(etag + ChatColor.GRAY + "Unknown Mojang player.");
 
 		} else {
 
@@ -692,7 +718,7 @@ public class Checkpoint extends JavaPlugin {
 
 						// If the player already set this CP:
 
-						player.sendMessage(ChatColor.DARK_AQUA + "Player already has this checkpoint.");
+						player.sendMessage(wtag + ChatColor.GRAY + "Player already has this checkpoint.");
 
 					} else {
 
@@ -711,7 +737,7 @@ public class Checkpoint extends JavaPlugin {
 
 				// Inform the player.
 
-				player.sendMessage(ChatColor.DARK_AQUA + name + " / " + player_id + " has a new CP at " + value);
+				player.sendMessage(stag + ChatColor.GRAY + name + " / " + player_id + " has a new CP at " + value);
 
 				// Let @Barrack know.
 
@@ -721,7 +747,7 @@ public class Checkpoint extends JavaPlugin {
 
 				// Checkpoint not found in files.
 
-				player.sendMessage(ChatColor.DARK_AQUA + "Unknown checkpoint.");
+				player.sendMessage(etag + ChatColor.GRAY + "Unknown checkpoint.");
 
 			}
 
@@ -773,41 +799,147 @@ public class Checkpoint extends JavaPlugin {
 	}
 
 	// Convert old players data.
-	
-	public boolean playerConvert(String name, String player_string, Boolean cp, Boolean pts, Boolean ffa){
+
+	public boolean convert(Player player, String[] msg){
+
+		String name = null;
+		String player_string = null;
+
+		if(msg.length == 1) {
+
+			// No player specified. Looking up the command sender.
+			
+			UUID player_id = player.getUniqueId();
+			player_string = player_id.toString();
+			name = player.getName();
+
+		} else if( (msg.length  == 2) && (player.isOp()) ) {
+
+			// Command sender is Op and there is a player specified.
+			
+			name = msg[1];
+
+			UUID player_uuid = UUIDManager.getUUIDFromPlayer(name);
+
+			if (player_uuid == null) {
+
+				// Unknown player.
+
+				player.sendMessage(etag + ChatColor.GRAY + "Unknown Mojang player.");
+
+				// Abort.
+
+				return true;
+
+			} else {
+
+				// Getting the UUID in string format.
+
+				player_string = player_uuid.toString();
+
+			}
+
+		} else {
+
+			// ^.^
+
+			help(player);
+
+			// Abort.
+
+			return true;
+
+		}
+
+		// Starting conversion.
+
+		player.sendMessage(stag + ChatColor.GRAY + "Starting Converter for :");
+		player.sendMessage(stag + ChatColor.GRAY + name + " - " + player_string);
+
+		// Checking the CP DB.
 
 		if(this.playerMap.containsKey(name)) {
+
+			// Convert.
 
 			String obj = this.playerMap.get(name);
 
 			this.playerMap.put(player_string, obj);
 			this.playerDB.setString(player_string, obj);
 			this.playerMap.remove(name);
+			this.playerDB.removeKey(name);
+
+			// Inform the player.
+
+			if(msg.length == 1) {
+				player.sendMessage(stag + ChatColor.GRAY + "Your CP has been updated to the new format.");
+			} else {
+				player.sendMessage(stag + ChatColor.GRAY + "Player updated to the new CP format:");
+				player.sendMessage(stag + ChatColor.GRAY + name + " - " + player_string);
+			}
+
+			// Let @Barrack know.
+
+			System.out.println("[MinrCheckpoint] " + player.getName() + " updated the CP of " + name + " / " + player_string);
 
 		}
-		
+
 		if(this.pointMap.containsKey(name)) {
+
+			// Convert.
 
 			String obj = this.pointMap.get(name);
 
 			this.pointMap.put(player_string, obj);
 			this.pointDB.setString(player_string, obj);
 			this.pointMap.remove(name);
+			this.pointDB.removeKey(name);
+
+			// Inform the player.
+
+			if(msg.length == 1) {
+				player.sendMessage(stag + ChatColor.GRAY + "Your points have been updated to the new format.");
+			} else {
+				player.sendMessage(stag + ChatColor.GRAY + "Player updated to the new points format:");
+				player.sendMessage(stag + ChatColor.GRAY + name + " - " + player_string);
+			}
+
+			// Let @Barrack know.
+
+			System.out.println("[MinrCheckpoint] " + player.getName() + " updated the Points of " + name + " / " + player_string);
 
 		}
 
 		if(this.ffaMap.containsKey(name)) {
 
+			// Convert.
+
 			String obj = this.ffaMap.get(name);
 
 			this.ffaMap.put(player_string, obj);
 			this.ffaDB.setString(player_string, obj);
-
 			this.ffaMap.remove(name);
+			this.ffaDB.removeKey(name);
+
+			// Inform the player.
+
+			if(msg.length == 1) {
+				player.sendMessage(stag + ChatColor.GRAY + "Your FFA history has been updated to the new format.");
+			} else {
+				player.sendMessage(stag + ChatColor.GRAY + "Player updated to the new FFA history format:");
+				player.sendMessage(stag + ChatColor.GRAY + name + " - " + player_string);
+			}
+
+			// Let @Barrack know.
+
+			System.out.println("[MinrCheckpoint] " + player.getName() + " updated the FFA history of " + name + " / " + player_string);
+
 		}
-		
+
+		player.sendMessage(stag + ChatColor.GRAY + "All done. Ready to go.");
+
 		return true;
-		
+
 	}
-	
+
 }

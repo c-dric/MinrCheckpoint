@@ -91,7 +91,7 @@ public class PlayerListener implements Listener {
 
 			String str1;
 			String str2;
-			
+
 			try {
 
 				// str1 is the second line of the sign. (first line is str0).
@@ -174,7 +174,7 @@ public class PlayerListener implements Listener {
 
 					// Inform the player.
 
-					player.sendMessage(etag + ChatColor.GRAY + "ERROR! This checkpoint doesn't exist. Please inform an admin.");
+					player.sendMessage(etag + ChatColor.GRAY + "This checkpoint doesn't exist. Please inform an admin.");
 
 					// Inform @Barrack.
 
@@ -215,7 +215,7 @@ public class PlayerListener implements Listener {
 
 					this.log.info("[MinrCheckpoint] " + name + " - " + player_string + " finished hardcore maze set at " + str2 + " / " + where);
 
-				}  else {
+				} else {
 
 					// CP doesn't exist.
 
@@ -428,7 +428,7 @@ public class PlayerListener implements Listener {
 
 					System.out.println("[MinrCheckpoint] " + name + " gained " + String.valueOf(mp) + " point(s) at " + str2 + " / " + where + " - New total : " + String.valueOf(i + mp) + " point(s)");
 
-				}  else {
+				} else {
 
 					player.sendMessage(ChatColor.RED + "ERROR! This checkpoint was removed. Please inform an admin.");
 
@@ -521,10 +521,17 @@ public class PlayerListener implements Listener {
 	public void playerConvert(Player player, String name, String player_string){
 
 		String tag = ChatColor.GRAY + "[" + ChatColor.WHITE + "MCP" + ChatColor.GRAY + "] ";
+
+		// Starting conversion.
+
 		player.sendMessage(tag + ChatColor.GRAY + "Starting Converter for :");
 		player.sendMessage(tag + ChatColor.GRAY + name + " - " + player_string);
 
+		// Checking the CP DB.
+
 		if(plugin.playerMap.containsKey(name)) {
+
+			// Convert.
 
 			String obj = plugin.playerMap.get(name);
 
@@ -533,11 +540,21 @@ public class PlayerListener implements Listener {
 			plugin.playerMap.remove(name);
 			plugin.playerDB.removeKey(name);
 
+			// Inform the player.
+
 			player.sendMessage(tag + ChatColor.GRAY + "Your CP has been updated to the new format.");
+
+			// Let @Barrack know.
+
+			System.out.println("[MinrCheckpoint] " + name + " updated the CP of " + name + " / " + player_string);
 
 		}
 
+		// Checking the Points DB.
+
 		if(plugin.pointMap.containsKey(name)) {
+
+			// Convert.
 
 			String obj = plugin.pointMap.get(name);
 
@@ -546,11 +563,21 @@ public class PlayerListener implements Listener {
 			plugin.pointMap.remove(name);
 			plugin.pointDB.removeKey(name);
 
+			// Inform the player.
+
 			player.sendMessage(tag + ChatColor.GRAY + "Your FFA points have been updated to the new format.");
+
+			// Let @Barrack know.
+
+			System.out.println("[MinrCheckpoint] " + name + " updated the points of " + name + " / " + player_string);
 
 		}
 
+		// Checking the FFA DB.
+
 		if(plugin.ffaMap.containsKey(name)) {
+
+			// Convert.
 
 			String obj = plugin.ffaMap.get(name);
 
@@ -559,7 +586,13 @@ public class PlayerListener implements Listener {
 			plugin.ffaMap.remove(name);
 			plugin.ffaDB.removeKey(name);
 
+			// Inform the player.
+
 			player.sendMessage(tag + ChatColor.GRAY + "Your FFA history has been updated to the new format.");
+
+			// Let @Barrack know.
+
+			System.out.println("[MinrCheckpoint] " + name + " updated the FFA history of " + name + " / " + player_string);
 
 		}
 
